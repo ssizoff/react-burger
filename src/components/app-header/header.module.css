@@ -1,23 +1,34 @@
 .header {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 1240px;
+    width: 1280px;
     margin: auto;
+    position: relative;
+    gap: calc(var(--offset-base-size) * 2);
+    padding:
+        calc(var(--offset-base-size) * 4)
 }
 
 .header button {
     display: inline-flex;
     align-items: center;
     color: white;
+    border-radius: var(--common-border-radius-s);
+    gap: calc(var(--offset-base-size) * 2);
+    padding:
+        calc(var(--offset-base-size) * 4) calc(var(--offset-base-size) * 5) calc(var(--offset-base-size) * 4) calc(var(--offset-base-size) * 5);
 }
 
 .logo {
-    flex-grow: 1;
-    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.profile {
+    margin-left: auto;
 }
 
 .innactive {
     color: var(--text-inactive-color) !important;
-    fill: var(--text-inactive-color) !important;
 }

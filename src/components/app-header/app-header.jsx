@@ -11,31 +11,26 @@ import styles from './header.module.css';
 export default class AppHeader extends React.Component {
     render() {
         return (
-            <div className={`p-4 ${styles.header}`}>
+            <div className={styles.header}>
+                <span className={styles.logo}>
+                    <Logo />
+                </span>
                 <Button htmlType="button" type="secondary" size="large">
                     <BurgerIcon type="primary" />
-                    <span className="ml-2">Конструктор</span>
+                    <span>Конструктор</span>
                 </Button>
-                <Button
-                    htmlType="button"
-                    type="secondary"
-                    size="large"
-                    extraClass={styles.innactive}
-                >
+                <Button htmlType="button" type="secondary" size="large">
                     <ListIcon type="secondary" />
-                    <span className="ml-2">Лента заказов</span>
+                    <span className="text_color_inactive">Лента заказов</span>
                 </Button>
-                <div className={styles.logo}>
-                    <Logo />
-                </div>
                 <Button
                     htmlType="button"
                     type="secondary"
                     size="large"
-                    extraClass={styles.innactive}
+                    extraClass={`${styles.profile}`}
                 >
                     <ProfileIcon type="secondary" />
-                    <span className="ml-2">Личный кабинет</span>
+                    <span className="text_color_inactive">Личный кабинет</span>
                 </Button>
             </div>
         );
