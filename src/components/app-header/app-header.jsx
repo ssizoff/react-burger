@@ -11,7 +11,7 @@ import styles from './header.module.css';
 export default class AppHeader extends React.Component {
     render() {
         return (
-            <div className={styles.header}>
+            <nav className={styles.header}>
                 <span className={styles.logo}>
                     <Logo />
                 </span>
@@ -32,7 +32,7 @@ export default class AppHeader extends React.Component {
                     <ProfileIcon type="secondary" />
                     <span className="text_color_inactive">Личный кабинет</span>
                 </Button>
-            </div>
+            </nav>
         );
     }
 }

@@ -19,7 +19,13 @@ export default class BurgerConstructor extends React.Component {
         ];
 
         return (
-            <>
+            <div
+                style={{
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                }}
+            >
                 <p className="mt-10 mb-5 pl-1 text text_type_main-large">
                     Соберите бургер
                 </p>
@@ -35,7 +41,7 @@ export default class BurgerConstructor extends React.Component {
                         </Tab>
                     ))}
                 </div>
-                <div>
+                <div style={{ flexGrow: 1, overflowY: 'auto' }}>
                     {types.map(({ type, title }) => (
                         <div key={type}>
                             <p className="mt-10 mb-6 pl-1 text text_type_main-medium">
@@ -45,9 +51,9 @@ export default class BurgerConstructor extends React.Component {
                                 style={{
                                     display: 'flex',
                                     flexWrap: 'wrap',
-                                    overflowY: 'auto',
+                                    gap: 24,
                                 }}
-                                className="p-4"
+                                className="pt-4 pl-4 pb-4"
                             >
                                 {BURGER_DATA.filter(i => i.type === type).map(
                                     i => (
@@ -58,7 +64,7 @@ export default class BurgerConstructor extends React.Component {
                         </div>
                     ))}
                 </div>
-            </>
+            </div>
         );
     }
 }

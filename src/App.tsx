@@ -4,9 +4,10 @@ import BurgerConstructor from './components/burger-constructor/burger-constructo
 
 function App() {
     return (
-        <div className="p-4">
+        <>
             <AppHeader />
-            <div style={{ width: 1240, margin: 'auto', position: 'relative' }}>
+
+            <main style={{ width: 1240, margin: 'auto', position: 'relative' }}>
                 <div
                     style={{
                         width: 600,
@@ -29,8 +30,8 @@ function App() {
                         top: 0,
                     }}
                 />
-            </div>
-        </div>
+            </main>
+        </>
     );
 }
 
