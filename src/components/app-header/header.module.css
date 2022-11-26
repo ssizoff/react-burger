@@ -1,0 +1,23 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 1240px;
+    margin: auto;
+}
+
+.header button {
+    display: inline-flex;
+    align-items: center;
+    color: white;
+}
+
+.logo {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.innactive {
+    color: var(--text-inactive-color) !important;
+    fill: var(--text-inactive-color) !important;
+}
