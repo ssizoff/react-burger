@@ -3,14 +3,13 @@ import {
     Button,
     ListIcon,
     Logo,
-    ProfileIcon,
+    ProfileIcon
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import React from 'react';
 import styles from './header.module.css';
 
-export default class AppHeader extends React.Component {
-    render() {
-        return (
+export default function AppHeader() {
+    return (
+        <header>
             <nav className={styles.header}>
                 <span className={styles.logo}>
                     <Logo />
@@ -33,6 +32,6 @@ export default class AppHeader extends React.Component {
                     <span className="text_color_inactive">Личный кабинет</span>
                 </Button>
             </nav>
-        );
-    }
+        </header>
+    );
 }

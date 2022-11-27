@@ -7,9 +7,6 @@
 .panel {
     width: 600px;
     height: 912px;
-    border-width: 2px;
-    border-style: solid;
-    border-color: var(--colors-interface-accent);
     position: absolute;
 }
 

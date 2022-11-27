@@ -1,18 +1,16 @@
+import { BURGER_CART, BURGER_DATA, BURGER_TYPES } from '../../utils/data';
+import AppHeader from '../app-header/app-header';
+import BurgerConstructor from '../burger-constructor/burger-constructor';
+import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import styles from './app.module.css';
-import AppHeader from './components/app-header/app-header';
-import BurgerConstructor from './components/burger-constructor/burger-constructor';
-import BurgerIngredients from './components/burger-ingredients/burger-ingredients';
-import { BURGER_CART, BURGER_DATA, BURGER_TYPES } from './utils/data';
 
 function App() {
     const cartIds = Object.keys(BURGER_CART);
 
     return (
         <>
-            <header>
-                <AppHeader />
-            </header>
-            
+            <AppHeader />
+
             <main className={styles.main}>
                 <div className={styles.left_panel}>
                     <BurgerConstructor

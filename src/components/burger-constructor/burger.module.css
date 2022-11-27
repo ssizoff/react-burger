@@ -4,6 +4,10 @@
     flex-direction: column;
 }
 
+.panel_tab {
+    display: flex;
+}
+
 .panel_list {
     flex-grow: 1;
     overflow-y: auto;
