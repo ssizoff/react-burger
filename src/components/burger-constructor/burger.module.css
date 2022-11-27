@@ -1,5 +1,33 @@
+.panel {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel_list {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--offset-base-size) * 6);
+    padding-left: calc(var(--offset-base-size) * 4);
+    padding-top: calc(var(--offset-base-size) * 4);
+    padding-bottom: calc(var(--offset-base-size) * 4);
+}
+
 .item {
     width: 272px;
+    position: relative;
+}
+
+.counter {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    z-index: 100;
 }
 
 .item img {
@@ -15,7 +43,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: var(--offset-base-size);
+    gap: calc(var(--offset-base-size) * 2);
 }
 
 .title {

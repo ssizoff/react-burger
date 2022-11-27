@@ -1,0 +1,26 @@
+.main {
+    width: 1240px;
+    margin: auto;
+    position: relative;
+}
+
+.panel {
+    width: 600px;
+    height: 912px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: var(--colors-interface-accent);
+    position: absolute;
+}
+
+.left_panel {
+    composes: panel;
+    left: 0px;
+    top: 0px;
+}
+
+.right_panel {
+    composes: panel;
+    right: 0px;
+    top: 0px;
+}

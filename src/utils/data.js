@@ -1,3 +1,19 @@
+export const BURGER_TYPES = [
+   { title: 'Булки', type: 'bun' },
+   { title: 'Соусы', type: 'sauce' },
+   { title: 'Начинки', type: 'main' },
+];
+
+export const BURGER_CART = {
+   "60666c42cc7b410027a1a9b1": 1,
+   "60666c42cc7b410027a1a9b5": 2,
+   "60666c42cc7b410027a1a9b7": 3,
+   "60666c42cc7b410027a1a9b4": 1,
+   "60666c42cc7b410027a1a9b8": 2,
+   "60666c42cc7b410027a1a9bc": 3,
+   "60666c42cc7b410027a1a9bd": 1
+};
+
 export const BURGER_DATA =
    [
       {
