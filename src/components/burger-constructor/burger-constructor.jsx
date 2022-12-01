@@ -2,11 +2,22 @@ import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { PROP_TYPES } from '../../utils/types';
+import IngredientDetails from '../ingredient-details/ingredient-details';
+import Modal from '../modal/modal';
 import BurgerGroup from './burger-group';
 import styles from './burger.module.css';
 
 export default function BurgerConstructor({ data, types, cart }) {
     const [activeTab, setActiveTab] = useState('bun');
+    const [activeItem, setActiveItem] = useState();
+
+    function onItemClick(item) {
+        setActiveItem(item);
+    }
+
+    function clearActiveItem() {
+        setActiveItem(undefined);
+    }
 
     return (
         <div className={styles.panel}>
@@ -32,9 +43,16 @@ export default function BurgerConstructor({ data, types, cart }) {
                         title={title}
                         cart={cart}
                         items={data.filter(i => i.type === type)}
+                        onItemClick={onItemClick}
                     />
                 ))}
             </div>
+
+            {activeItem && (
+                <Modal header="Детали ингредиента" onClose={clearActiveItem}>
+                    <IngredientDetails item={activeItem} />
+                </Modal>
+            )}
         </div>
     );
 }

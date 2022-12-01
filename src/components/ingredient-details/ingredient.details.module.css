@@ -1,0 +1,19 @@
+.image {
+    width: 480px;
+    height: 240px;
+    margin-bottom: var(--offset-base-size);
+}
+
+.nutrition {
+    display: flex;
+    gap: calc(var(--offset-base-size) * 5);
+}
+
+.nutrition>div {
+    flex-grow: 1;
+}
+
+.nutrition p {
+    margin: 0px;
+    text-align: center;
+}
