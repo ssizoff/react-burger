@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { BURGER_CART, BURGER_TYPES } from '../../utils/data';
 import AppHeader from '../app-header/app-header';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
+import BurgerIngredients from '../burger-constructor/burger-ingredients';
+import BurgerConstructor1 from '../burger-ingredients/burger-constructor';
 import styles from './app.module.css';
 
 const API_URL = 'https://norma.nomoreparties.space/api/ingredients';
@@ -30,14 +30,14 @@ function App() {
 
             <main className={styles.main}>
                 <div className={styles.left_panel}>
-                    <BurgerConstructor
+                    <BurgerIngredients
                         cart={BURGER_CART}
                         data={ingredients}
                         types={BURGER_TYPES}
                     />
                 </div>
                 <div className={styles.right_panel}>
-                    <BurgerIngredients
+                    <BurgerConstructor1
                         data={ingredients.filter(i => cartIds.includes(i._id))}
                     />
                 </div>

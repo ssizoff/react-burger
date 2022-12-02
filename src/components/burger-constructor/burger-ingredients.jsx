@@ -7,7 +7,7 @@ import Modal from '../modal/modal';
 import BurgerGroup from './burger-group';
 import styles from './burger.module.css';
 
-export default function BurgerConstructor({ data, types, cart }) {
+export default function BurgerIngredients({ data, types, cart }) {
     const [activeTab, setActiveTab] = useState('bun');
     const [activeItem, setActiveItem] = useState();
 
@@ -57,7 +57,7 @@ export default function BurgerConstructor({ data, types, cart }) {
     );
 }
 
-BurgerConstructor.propTypes = {
+BurgerIngredients.propTypes = {
     types: PropTypes.arrayOf(PROP_TYPES.burgerType).isRequired,
     data: PropTypes.arrayOf(PROP_TYPES.burgerIngredient).isRequired,
     cart: PropTypes.object,

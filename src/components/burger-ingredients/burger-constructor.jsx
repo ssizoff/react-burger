@@ -9,9 +9,9 @@ import { PropTypes } from 'prop-types';
 import { PROP_TYPES } from '../../utils/types';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-import styles from './ingredients.module.css';
+import styles from './constructor.module.css';
 
-export default function BurgerIngredients({ data }) {
+export default function BurgerConstructor1({ data }) {
     const [order, setOrder] = useState();
 
     const bun = data.find(i => i.type === 'bun');
@@ -92,6 +92,6 @@ export default function BurgerIngredients({ data }) {
     );
 }
 
-BurgerIngredients.propTypes = {
+BurgerConstructor1.propTypes = {
     data: PropTypes.arrayOf(PROP_TYPES.burgerIngredient).isRequired,
 };
