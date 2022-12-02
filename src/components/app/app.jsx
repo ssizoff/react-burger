@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { BURGER_CART, BURGER_TYPES } from '../../utils/data';
 import AppHeader from '../app-header/app-header';
-import BurgerIngredients from '../burger-constructor/burger-ingredients';
-import BurgerConstructor1 from '../burger-ingredients/burger-constructor';
+import BurgerIngredients from '../burger-ingredients/burger-ingredients';
+import BurgerConstructor1 from '../burger-constructor1/burger-constructor';
 import styles from './app.module.css';
 
 const API_URL = 'https://norma.nomoreparties.space/api/ingredients';

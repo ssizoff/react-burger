@@ -3,7 +3,7 @@ import {
     CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
-import { PROP_TYPES } from './../../utils/types';
+import { PROP_TYPES } from '../../utils/types';
 import styles from './burger.module.css';
 
 export default function BurgerItem({ item, count, onItemClick }) {
