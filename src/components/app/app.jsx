@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { BURGER_CART, BURGER_TYPES } from '../../utils/data';
 import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import BurgerConstructor1 from '../burger-constructor1/burger-constructor';
+import BurgerConstructor1 from '../burger-constructor/burger-constructor';
 import styles from './app.module.css';
 
 const API_URL = 'https://norma.nomoreparties.space/api/ingredients';
@@ -14,7 +14,10 @@ function App() {
 
     useEffect(() => {
         fetch(API_URL)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error(res.statusText);
+                return res.json();
+            })
             .then(({ success, data }) => {
                 if (success) setIngredients(data);
                 else setError(new Error('Ошибка запроса'));
@@ -42,8 +45,6 @@ function App() {
                     />
                 </div>
             </main>
-
-            <div id="react-modals" />
         </>
     );
 }
