@@ -1,15 +1,17 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { BurgerContext } from '../../utils/burger-context';
 import { PROP_TYPES } from '../../utils/types';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import BurgerGroup from './burger-group';
 import styles from './burger.module.css';
 
-export default function BurgerIngredients({ data, types, cart }) {
+export default function BurgerIngredients({ types }) {
     const [activeTab, setActiveTab] = useState('bun');
     const [activeItem, setActiveItem] = useState();
+    const { ingredients, cart } = useContext(BurgerContext);
 
     function onItemClick(item) {
         setActiveItem(item);
@@ -42,7 +44,7 @@ export default function BurgerIngredients({ data, types, cart }) {
                         key={type}
                         title={title}
                         cart={cart}
-                        items={data.filter(i => i.type === type)}
+                        items={ingredients.filter(i => i.type === type)}
                         onItemClick={onItemClick}
                     />
                 ))}
@@ -59,6 +61,4 @@ export default function BurgerIngredients({ data, types, cart }) {
 
 BurgerIngredients.propTypes = {
     types: PropTypes.arrayOf(PROP_TYPES.burgerType).isRequired,
-    data: PropTypes.arrayOf(PROP_TYPES.burgerIngredient).isRequired,
-    cart: PropTypes.object,
 };

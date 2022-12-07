@@ -1,27 +1,29 @@
-import { useState } from 'react';
 import {
     Button,
     ConstructorElement,
     CurrencyIcon,
-    DragIcon,
+    DragIcon
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { PropTypes } from 'prop-types';
-import { PROP_TYPES } from '../../utils/types';
+import { useContext, useState } from 'react';
+import { apiSendOrder } from '../../utils/burger-api';
+import { BurgerContext } from '../../utils/burger-context';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import styles from './constructor.module.css';
 
-export default function BurgerConstructor1({ data }) {
+export default function BurgerConstructor() {
     const [order, setOrder] = useState();
+    const { ingredients, cart } = useContext(BurgerContext);
 
+    const data = ingredients.filter(i => cart[i._id] > 0);
     const bun = data.find(i => i.type === 'bun');
     const items = data.filter(i => i.type !== 'bun');
-    const totalPrice = data
-        .map(i => i.price)
-        .reduce((total, price) => total + price, 0);
+    const totalPrice =
+        (bun?.price ?? 0) * 2 +
+        items.map(i => i.price).reduce((total, price) => total + price, 0);
 
     function onOrderClick() {
-        setOrder(123456);
+        apiSendOrder([...Object.keys(cart)], setOrder, error => alert(error));
     }
 
     function clearOrder() {
@@ -32,7 +34,7 @@ export default function BurgerConstructor1({ data }) {
         <>
             {order && (
                 <Modal onClose={clearOrder}>
-                    <OrderDetails orderNumber={order} />
+                    <OrderDetails order={order} />
                 </Modal>
             )}
             <div className={styles.panel}>
@@ -92,6 +94,3 @@ export default function BurgerConstructor1({ data }) {
     );
 }
 
-BurgerConstructor1.propTypes = {
-    data: PropTypes.arrayOf(PROP_TYPES.burgerIngredient).isRequired,
-};

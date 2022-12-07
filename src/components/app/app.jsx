@@ -2,50 +2,34 @@ import { useEffect, useState } from 'react';
 import { BURGER_CART, BURGER_TYPES } from '../../utils/data';
 import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import BurgerConstructor1 from '../burger-constructor/burger-constructor';
+import BurgerConstructor from '../burger-constructor/burger-constructor';
 import styles from './app.module.css';
+import { apiRequestIngredients } from '../../utils/burger-api';
+import { BurgerContext } from './../../utils/burger-context';
 
-const API_URL = 'https://norma.nomoreparties.space/api/ingredients';
+//const cartIds = Object.keys(BURGER_CART);
 
 function App() {
-    const cartIds = Object.keys(BURGER_CART);
     const [ingredients, setIngredients] = useState([]);
     const [error, setError] = useState();
 
-    useEffect(() => {
-        fetch(API_URL)
-            .then(res => {
-                if (!res.ok) throw new Error(res.statusText);
-                return res.json();
-            })
-            .then(({ success, data }) => {
-                if (success) setIngredients(data);
-                else setError(new Error('Ошибка запроса'));
-            })
-            .catch(err => setError(err.message));
-    }, []);
+    useEffect(() => apiRequestIngredients(setIngredients, setError), []);
 
     return (
-        <>
+        <BurgerContext.Provider value={{ ingredients, cart: BURGER_CART }}>
             <AppHeader />
 
             {error && <p className={styles.error}>{error}</p>}
 
             <main className={styles.main}>
                 <div className={styles.left_panel}>
-                    <BurgerIngredients
-                        cart={BURGER_CART}
-                        data={ingredients}
-                        types={BURGER_TYPES}
-                    />
+                    <BurgerIngredients types={BURGER_TYPES} />
                 </div>
                 <div className={styles.right_panel}>
-                    <BurgerConstructor1
-                        data={ingredients.filter(i => cartIds.includes(i._id))}
-                    />
+                    <BurgerConstructor />
                 </div>
             </main>
-        </>
+        </BurgerContext.Provider>
     );
 }
 
