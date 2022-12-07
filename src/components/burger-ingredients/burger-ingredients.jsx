@@ -1,76 +1,64 @@
-import {
-    Button,
-    ConstructorElement,
-    CurrencyIcon,
-    DragIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-import { PropTypes } from 'prop-types';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { PROP_TYPES } from '../../utils/types';
-import styles from './ingredients.module.css';
+import IngredientDetails from '../ingredient-details/ingredient-details';
+import Modal from '../modal/modal';
+import BurgerGroup from './burger-group';
+import styles from './burger.module.css';
 
-export default function BurgerIngredients({ data }) {
-    const bun = data.find(i => i.type === 'bun');
-    const items = data.filter(i => i.type !== 'bun');
-    const totalPrice = data
-        .map(i => i.price)
-        .reduce((total, price) => total + price, 0);
+export default function BurgerIngredients({ data, types, cart }) {
+    const [activeTab, setActiveTab] = useState('bun');
+    const [activeItem, setActiveItem] = useState();
+
+    function onItemClick(item) {
+        setActiveItem(item);
+    }
+
+    function clearActiveItem() {
+        setActiveItem(undefined);
+    }
 
     return (
         <div className={styles.panel}>
-            <div className={styles.top_panel}>
-                {bun && (
-                    <ConstructorElement
-                        type="top"
-                        isLocked={true}
-                        text={`${bun.name} (верх)`}
-                        price={bun.price}
-                        thumbnail={bun.image}
-                    />
-                )}
-            </div>
-            <div className={styles.middle_panel}>
-                {items.map(item => (
-                    <div key={item._id} className={styles.item}>
-                        <DragIcon type="primary" />
-                        <ConstructorElement
-                            text={item.name}
-                            price={item.price}
-                            thumbnail={item.image}
-                        />
-                    </div>
+            <p className="mt-10 mb-5 pl-1 text text_type_main-large">
+                Соберите бургер
+            </p>
+            <div className={styles.panel_tab}>
+                {types.map(i => (
+                    <Tab
+                        key={i.type}
+                        value={i.type}
+                        active={activeTab === i.type}
+                        onClick={setActiveTab}
+                    >
+                        {i.title}
+                    </Tab>
                 ))}
             </div>
-            <div className={styles.bottom_panel}>
-                {bun && (
-                    <div className="pr-2 pl-8">
-                        <ConstructorElement
-                            type="bottom"
-                            isLocked={true}
-                            text={`${bun.name} (низ)`}
-                            price={bun.price}
-                            thumbnail={bun.image}
-                        />
-                    </div>
-                )}
-                <div className={styles.total_price}>
-                    <span className="text text_type_digits-medium mr-2">
-                        {totalPrice}
-                    </span>
-                    <CurrencyIcon type="primary" />
-                    <Button
-                        htmlType="button"
-                        type="primary"
-                        size="large"
-                        extraClass="ml-10"
-                    >
-                        Оформить заказ
-                    </Button>
-                </div>
+            <div className={styles.panel_list}>
+                {types.map(({ type, title }) => (
+                    <BurgerGroup
+                        key={type}
+                        title={title}
+                        cart={cart}
+                        items={data.filter(i => i.type === type)}
+                        onItemClick={onItemClick}
+                    />
+                ))}
             </div>
+
+            {activeItem && (
+                <Modal header="Детали ингредиента" onClose={clearActiveItem}>
+                    <IngredientDetails item={activeItem} />
+                </Modal>
+            )}
         </div>
     );
 }
 
 BurgerIngredients.propTypes = {
+    types: PropTypes.arrayOf(PROP_TYPES.burgerType).isRequired,
     data: PropTypes.arrayOf(PROP_TYPES.burgerIngredient).isRequired,
+    cart: PropTypes.object,
 };

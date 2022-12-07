@@ -21,3 +21,10 @@
     right: 0px;
     top: 0px;
 }
+
+.error {
+    color: red;
+    font-weight: bolder;
+    padding: 0.5rem;
+    text-align: center;
+}

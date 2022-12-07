@@ -5,13 +5,11 @@ export const BURGER_TYPES = [
 ];
 
 export const BURGER_CART = {
-   "60666c42cc7b410027a1a9b1": 1,
-   "60666c42cc7b410027a1a9b5": 2,
-   "60666c42cc7b410027a1a9b7": 3,
-   "60666c42cc7b410027a1a9b4": 1,
-   "60666c42cc7b410027a1a9b8": 2,
-   "60666c42cc7b410027a1a9bc": 3,
-   "60666c42cc7b410027a1a9bd": 1
+   "60d3b41abdacab0026a733c6": 1,
+   "60d3b41abdacab0026a733c8": 2,
+   "60d3b41abdacab0026a733c9": 3,
+   "60d3b41abdacab0026a733ca": 1,
+   "60d3b41abdacab0026a733cc": 2,
 };
 
 export const BURGER_DATA =

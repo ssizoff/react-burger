@@ -16,5 +16,6 @@ export const PROP_TYPES = {
         type: PropTypes.oneOf(TYPE_VARIANTS).isRequired,
         price: PropTypes.number.isRequired,
         image: PropTypes.string.isRequired,
+        image_large: PropTypes.string.isRequired,
     })
 };
