@@ -1,7 +1,7 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
-import { useContext, useState } from 'react';
-import { BurgerContext } from '../../utils/burger-context';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { PROP_TYPES } from '../../utils/types';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
@@ -9,9 +9,15 @@ import BurgerGroup from './burger-group';
 import styles from './burger.module.css';
 
 export default function BurgerIngredients({ types }) {
+    const cart = useSelector(state => state.cart);
+    const {
+        loading,
+        error,
+        data: ingredients,
+    } = useSelector(state => state.ingredients);
+
     const [activeTab, setActiveTab] = useState('bun');
     const [activeItem, setActiveItem] = useState();
-    const { ingredients, cart } = useContext(BurgerContext);
 
     function onItemClick(item) {
         setActiveItem(item);
@@ -19,6 +25,12 @@ export default function BurgerIngredients({ types }) {
 
     function clearActiveItem() {
         setActiveItem(undefined);
+    }
+
+    function onTablClick(tabKey) {
+        setActiveTab(tabKey);
+        const group = document.getElementById(`group-${tabKey}`);
+        group?.scrollIntoView({ behavior: 'smooth' });
     }
 
     return (
@@ -32,22 +44,35 @@ export default function BurgerIngredients({ types }) {
                         key={i.type}
                         value={i.type}
                         active={activeTab === i.type}
-                        onClick={setActiveTab}
+                        onClick={onTablClick}
                     >
                         {i.title}
                     </Tab>
                 ))}
             </div>
             <div className={styles.panel_list}>
-                {types.map(({ type, title }) => (
-                    <BurgerGroup
-                        key={type}
-                        title={title}
-                        cart={cart}
-                        items={ingredients.filter(i => i.type === type)}
-                        onItemClick={onItemClick}
-                    />
-                ))}
+                {loading && (
+                    <div className={styles.info}>
+                        <i>Загрузка...</i>
+                    </div>
+                )}
+                {error && (
+                    <div className={styles.info}>
+                        <i>{error}</i>
+                    </div>
+                )}
+                {!loading &&
+                    !error &&
+                    types.map(({ type, title }) => (
+                        <BurgerGroup
+                            id={`group-${type}`}
+                            key={type}
+                            title={title}
+                            cart={cart}
+                            items={ingredients.filter(i => i.type === type)}
+                            onItemClick={onItemClick}
+                        />
+                    ))}
             </div>
 
             {activeItem && (

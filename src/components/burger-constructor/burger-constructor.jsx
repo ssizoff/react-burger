@@ -1,29 +1,39 @@
 import {
     Button,
     ConstructorElement,
-    CurrencyIcon,
-    DragIcon
+    CurrencyIcon
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
+import { useDrop } from 'react-dnd/dist/hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    addCartItem
+} from '../../services/reducers/cart-reducer';
 import { apiSendOrder } from '../../utils/burger-api';
-import { BurgerContext } from '../../utils/burger-context';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
+import cartUtil from './../../services/cart-util';
+import BurgerElement from './burger-element';
 import styles from './constructor.module.css';
 
 export default function BurgerConstructor() {
-    const [order, setOrder] = useState();
-    const { ingredients, cart } = useContext(BurgerContext);
+    const dispatch = useDispatch();
+    const cart = useSelector(state => state.cart);
+    const { data: ingredients } = useSelector(state => state.ingredients);
+    const [, dropRef] = useDrop(() => ({
+        accept: 'INGREDIENT',
+        drop: item => dispatch(addCartItem(item)),
+    }));
 
-    const data = ingredients.filter(i => cart[i._id] > 0);
-    const bun = data.find(i => i.type === 'bun');
-    const items = data.filter(i => i.type !== 'bun');
-    const totalPrice =
-        (bun?.price ?? 0) * 2 +
-        items.map(i => i.price).reduce((total, price) => total + price, 0);
+    const [order, setOrder] = useState();
+
+    const util = new cartUtil(cart);
+    const bun = util.getBun(ingredients);
+    const items = util.getCart(ingredients);
+    const totalPrice = util.getTotalPrice(ingredients);
 
     function onOrderClick() {
-        apiSendOrder([...Object.keys(cart)], setOrder, error => alert(error));
+        apiSendOrder(util.getIds(), setOrder, error => alert(error));
     }
 
     function clearOrder() {
@@ -49,16 +59,20 @@ export default function BurgerConstructor() {
                         />
                     )}
                 </div>
-                <div className={styles.middle_panel}>
-                    {items.map(item => (
-                        <div key={item._id} className={styles.item}>
-                            <DragIcon type="primary" />
-                            <ConstructorElement
-                                text={item.name}
-                                price={item.price}
-                                thumbnail={item.image}
-                            />
-                        </div>
+                <div className={styles.middle_panel} ref={dropRef}>
+                    {items.map(({ key, item }) => (
+                        <BurgerElement key={key} itemKey={key} item={item} />
+                        // <div key={key} className={styles.item}>
+                        //     <DragIcon type="primary" />
+                        //     <ConstructorElement
+                        //         text={item.name}
+                        //         price={item.price}
+                        //         thumbnail={item.image}
+                        //         handleClose={() =>
+                        //             dispatch(removeCartItem(key))
+                        //         }
+                        //     />
+                        // </div>
                     ))}
                 </div>
                 <div className={styles.bottom_panel}>
@@ -93,4 +107,3 @@ export default function BurgerConstructor() {
         </>
     );
 }
-

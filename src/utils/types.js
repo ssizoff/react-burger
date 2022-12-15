@@ -17,5 +17,11 @@ export const PROP_TYPES = {
         price: PropTypes.number.isRequired,
         image: PropTypes.string.isRequired,
         image_large: PropTypes.string.isRequired,
+    }),
+
+    burgerCartItem: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        extra_id: PropTypes.number.isRequired,
+        is_bun: PropTypes.bool.isRequired,
     })
 };
