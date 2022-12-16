@@ -8,8 +8,10 @@ export default function BurgerGroup({ id, title, items, cart, onItemClick }) {
     const util = new cartUtil(cart);
 
     return (
-        <div id={id} className="pt-10">
-            <p className="mb-6 pl-1 text text_type_main-medium">{title}</p>
+        <div id={id} style={{ boxSizing: 'border-box' }}>
+            <p className="mb-6 pl-1 pt-10 text text_type_main-medium">
+                {title}
+            </p>
             <div className={styles.group}>
                 {items.map(i => (
                     <BurgerItem

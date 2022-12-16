@@ -1,11 +1,13 @@
 import {
     CheckMarkIcon,
-    CloseIcon,
+    CloseIcon
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import styles from './order.details.module.css';
 
-export default function OrderDetails({ order }) {
+export default function OrderDetails() {
+    const order = useSelector(state => state.order);
+
     return (
         <>
             <p className="text text_type_digits-large mb-8">
@@ -34,13 +36,3 @@ export default function OrderDetails({ order }) {
         </>
     );
 }
-
-OrderDetails.propTypes = {
-    order: PropTypes.shape({
-        success: PropTypes.bool.isRequired,
-        name: PropTypes.string,
-        order: PropTypes.shape({
-            number: PropTypes.number.isRequired,
-        }),
-    }).isRequired,
-};

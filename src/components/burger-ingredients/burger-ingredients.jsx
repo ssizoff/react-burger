@@ -1,7 +1,11 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    clearIngredient,
+    setIngredient
+} from '../../services/reducers/ingredient-reducer';
 import { PROP_TYPES } from '../../utils/types';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
@@ -9,6 +13,8 @@ import BurgerGroup from './burger-group';
 import styles from './burger.module.css';
 
 export default function BurgerIngredients({ types }) {
+    const dispatch = useDispatch();
+    const activeItem = useSelector(state => state.ingredient);
     const cart = useSelector(state => state.cart);
     const {
         loading,
@@ -17,20 +23,25 @@ export default function BurgerIngredients({ types }) {
     } = useSelector(state => state.ingredients);
 
     const [activeTab, setActiveTab] = useState('bun');
-    const [activeItem, setActiveItem] = useState();
 
     function onItemClick(item) {
-        setActiveItem(item);
+        dispatch(setIngredient(item));
     }
 
     function clearActiveItem() {
-        setActiveItem(undefined);
+        dispatch(clearIngredient());
     }
 
     function onTablClick(tabKey) {
         setActiveTab(tabKey);
         const group = document.getElementById(`group-${tabKey}`);
         group?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function onScroll(e) {
+        for (const div of e.target.children)
+            if (e.target.scrollTop >= div.offsetTop - e.target.offsetTop)
+                setActiveTab(div.id.split('-')[1]);
     }
 
     return (
@@ -50,7 +61,7 @@ export default function BurgerIngredients({ types }) {
                     </Tab>
                 ))}
             </div>
-            <div className={styles.panel_list}>
+            <div className={styles.panel_list} onScroll={onScroll}>
                 {loading && (
                     <div className={styles.info}>
                         <i>Загрузка...</i>

@@ -13,7 +13,7 @@ const cartSlice = createSlice({
         addCartItem: (state, action) => {
             const cart = new cartUtil(state);
 
-            cart.addItem(action.payload.id, action.payload.is_bun);
+            cart.addItem(action.payload.id, action.payload.is_bun, action.payload.toKey);
             return cart.Items;
         },
         removeCartItem: (state, action) => {

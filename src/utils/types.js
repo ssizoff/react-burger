@@ -23,5 +23,13 @@ export const PROP_TYPES = {
         id: PropTypes.string.isRequired,
         extra_id: PropTypes.number.isRequired,
         is_bun: PropTypes.bool.isRequired,
+    }),
+
+    order: PropTypes.shape({
+        success: PropTypes.bool.isRequired,
+        name: PropTypes.string,
+        order: PropTypes.shape({
+            number: PropTypes.number.isRequired,
+        }),
     })
 };

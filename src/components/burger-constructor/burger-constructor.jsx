@@ -1,15 +1,12 @@
 import {
     Button,
     ConstructorElement,
-    CurrencyIcon
+    CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState } from 'react';
 import { useDrop } from 'react-dnd/dist/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    addCartItem
-} from '../../services/reducers/cart-reducer';
-import { apiSendOrder } from '../../utils/burger-api';
+import { addCartItem } from '../../services/reducers/cart-reducer';
+import { fetchOrder, hideOrder } from '../../services/reducers/order-reducer';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import cartUtil from './../../services/cart-util';
@@ -17,34 +14,39 @@ import BurgerElement from './burger-element';
 import styles from './constructor.module.css';
 
 export default function BurgerConstructor() {
-    const dispatch = useDispatch();
-    const cart = useSelector(state => state.cart);
     const { data: ingredients } = useSelector(state => state.ingredients);
-    const [, dropRef] = useDrop(() => ({
-        accept: 'INGREDIENT',
-        drop: item => dispatch(addCartItem(item)),
-    }));
+    const cart = useSelector(state => state.cart);
+    const order = useSelector(state => state.order);
 
-    const [order, setOrder] = useState();
+    const dispatch = useDispatch();
 
     const util = new cartUtil(cart);
     const bun = util.getBun(ingredients);
     const items = util.getCart(ingredients);
     const totalPrice = util.getTotalPrice(ingredients);
 
+    const [, dropRef] = useDrop(
+        () => ({
+            accept: 'INGREDIENT',
+            canDrop: item => item.is_bun || items.length === 0,
+            drop: item => dispatch(addCartItem(item)),
+        }),
+        [items]
+    );
+
     function onOrderClick() {
-        apiSendOrder(util.getIds(), setOrder, error => alert(error));
+        dispatch(fetchOrder(util.getIds()));
     }
 
-    function clearOrder() {
-        setOrder(undefined);
+    function closeOrder() {
+        dispatch(hideOrder());
     }
 
     return (
         <>
-            {order && (
-                <Modal onClose={clearOrder}>
-                    <OrderDetails order={order} />
+            {order.show && (
+                <Modal onClose={closeOrder}>
+                    <OrderDetails />
                 </Modal>
             )}
             <div className={styles.panel}>
@@ -62,17 +64,6 @@ export default function BurgerConstructor() {
                 <div className={styles.middle_panel} ref={dropRef}>
                     {items.map(({ key, item }) => (
                         <BurgerElement key={key} itemKey={key} item={item} />
-                        // <div key={key} className={styles.item}>
-                        //     <DragIcon type="primary" />
-                        //     <ConstructorElement
-                        //         text={item.name}
-                        //         price={item.price}
-                        //         thumbnail={item.image}
-                        //         handleClose={() =>
-                        //             dispatch(removeCartItem(key))
-                        //         }
-                        //     />
-                        // </div>
                     ))}
                 </div>
                 <div className={styles.bottom_panel}>

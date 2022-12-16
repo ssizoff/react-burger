@@ -44,10 +44,16 @@ export default class cartUtil {
         return this.#items.map(i => ({ key: cartUtil.itemKey(i), ...i }));
     }
 
-    addItem(id, is_bun) {
+    addItem(id, is_bun, toKey) {
         const items = is_bun ? this.#items.filter(i => !i.is_bun) : this.#items;
         const extra_id = this.nextExtraId(id);
-        this.#items = [...items, { id, is_bun, extra_id }];
+        const newItem = { id, is_bun, extra_id };
+
+        if (toKey !== undefined) {
+            const toIdx = this.#items.indexOf(this.byKey(toKey));
+            this.#items.splice(toIdx, 0, newItem);
+        }
+        else this.#items = [...items, newItem];
     }
 
     removeByKey(key) {
