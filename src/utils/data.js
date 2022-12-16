@@ -1,5 +1,7 @@
+export const BURGER_BUN = 'bun';
+
 export const BURGER_TYPES = [
-   { title: 'Булки', type: 'bun' },
+   { title: 'Булки', type: BURGER_BUN },
    { title: 'Соусы', type: 'sauce' },
    { title: 'Начинки', type: 'main' },
 ];

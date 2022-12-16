@@ -1,5 +1,5 @@
 
-export default class cartUtil {
+export default class CartUtil {
 
     static itemKey(item) {
         return `${item.id}#${item.extra_id}`;
@@ -28,7 +28,7 @@ export default class cartUtil {
     }
 
     byKey(key) {
-        return this.#items.find(i => cartUtil.itemKey(i) === key);
+        return this.#items.find(i => CartUtil.itemKey(i) === key);
     }
 
     count(id) {
@@ -41,7 +41,7 @@ export default class cartUtil {
     }
 
     toArray() {
-        return this.#items.map(i => ({ key: cartUtil.itemKey(i), ...i }));
+        return this.#items.map(i => ({ key: CartUtil.itemKey(i), ...i }));
     }
 
     addItem(id, is_bun, toKey) {
@@ -57,7 +57,7 @@ export default class cartUtil {
     }
 
     removeByKey(key) {
-        this.#items = this.#items.filter(i => cartUtil.itemKey(i) !== key);
+        this.#items = this.#items.filter(i => CartUtil.itemKey(i) !== key);
     }
 
     reoderByKey(fromKey, toKey) {

@@ -11,6 +11,7 @@ const store = configureStore({
         cart,
         order
     },
+    devTools: true
 });
 
 export default store;

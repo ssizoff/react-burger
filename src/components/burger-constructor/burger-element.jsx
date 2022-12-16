@@ -61,5 +61,5 @@ export default function BurgerElement({ itemKey, item }) {
 
 BurgerElement.propTypes = {
     itemKey: PropTypes.string.isRequired,
-    item: PROP_TYPES.burgerIngredient.isRequired,
+    item: PROP_TYPES.burgerIngredient,
 };

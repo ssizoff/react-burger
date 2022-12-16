@@ -1,14 +1,25 @@
 import PropTypes from 'prop-types';
 import { PROP_TYPES } from '../../utils/types';
-import cartUtil from './../../services/cart-util';
+import CartUtil from './../../services/cart-util';
 import BurgerItem from './burger-item';
 import styles from './burger.module.css';
 
-export default function BurgerGroup({ id, title, items, cart, onItemClick }) {
-    const util = new cartUtil(cart);
+export default function BurgerGroup({
+    title,
+    type,
+    items,
+    cart,
+    onItemClick,
+    onRef,
+}) {
+    const util = new CartUtil(cart);
 
     return (
-        <div id={id} style={{ boxSizing: 'border-box' }}>
+        <div
+            id={`group-${type}`}
+            style={{ boxSizing: 'border-box' }}
+            ref={ref => onRef(type, ref)}
+        >
             <p className="mb-6 pl-1 pt-10 text text_type_main-medium">
                 {title}
             </p>
@@ -27,9 +38,10 @@ export default function BurgerGroup({ id, title, items, cart, onItemClick }) {
 }
 
 BurgerGroup.propTypes = {
-    id: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(PROP_TYPES.burgerIngredient).isRequired,
     cart: PropTypes.arrayOf(PROP_TYPES.burgerCartItem).isRequired,
     onItemClick: PropTypes.func.isRequired,
+    onRef: PropTypes.func.isRequired,
 };

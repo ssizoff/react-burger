@@ -1,15 +1,16 @@
 import {
     Button,
     ConstructorElement,
-    CurrencyIcon,
+    CurrencyIcon
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useMemo } from 'react';
 import { useDrop } from 'react-dnd/dist/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCartItem } from '../../services/reducers/cart-reducer';
 import { fetchOrder, hideOrder } from '../../services/reducers/order-reducer';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-import cartUtil from './../../services/cart-util';
+import CartUtil from './../../services/cart-util';
 import BurgerElement from './burger-element';
 import styles from './constructor.module.css';
 
@@ -20,10 +21,18 @@ export default function BurgerConstructor() {
 
     const dispatch = useDispatch();
 
-    const util = new cartUtil(cart);
-    const bun = util.getBun(ingredients);
-    const items = util.getCart(ingredients);
-    const totalPrice = util.getTotalPrice(ingredients);
+    const bun = useMemo(
+        () => new CartUtil(cart).getBun(ingredients),
+        [cart, ingredients]
+    );
+    const items = useMemo(
+        () => new CartUtil(cart).getCart(ingredients),
+        [cart, ingredients]
+    );
+    const totalPrice = useMemo(
+        () => new CartUtil(cart).getTotalPrice(ingredients),
+        [cart, ingredients]
+    );
 
     const [, dropRef] = useDrop(
         () => ({
@@ -35,7 +44,7 @@ export default function BurgerConstructor() {
     );
 
     function onOrderClick() {
-        dispatch(fetchOrder(util.getIds()));
+        dispatch(fetchOrder(new CartUtil(cart).getIds()));
     }
 
     function closeOrder() {

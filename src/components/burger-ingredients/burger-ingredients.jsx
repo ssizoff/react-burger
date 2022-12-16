@@ -1,16 +1,17 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     clearIngredient,
-    setIngredient
+    setIngredient,
 } from '../../services/reducers/ingredient-reducer';
 import { PROP_TYPES } from '../../utils/types';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
 import BurgerGroup from './burger-group';
 import styles from './burger.module.css';
+import { BURGER_BUN } from './../../utils/data';
 
 export default function BurgerIngredients({ types }) {
     const dispatch = useDispatch();
@@ -21,8 +22,13 @@ export default function BurgerIngredients({ types }) {
         error,
         data: ingredients,
     } = useSelector(state => state.ingredients);
+    const groupRefs = useRef({});
 
-    const [activeTab, setActiveTab] = useState('bun');
+    const [activeTab, setActiveTab] = useState(BURGER_BUN);
+
+    function saveRef(group, ref) {
+        groupRefs.current[group] = ref;
+    }
 
     function onItemClick(item) {
         dispatch(setIngredient(item));
@@ -34,7 +40,7 @@ export default function BurgerIngredients({ types }) {
 
     function onTablClick(tabKey) {
         setActiveTab(tabKey);
-        const group = document.getElementById(`group-${tabKey}`);
+        const group = groupRefs.current[tabKey];
         group?.scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -76,12 +82,13 @@ export default function BurgerIngredients({ types }) {
                     !error &&
                     types.map(({ type, title }) => (
                         <BurgerGroup
-                            id={`group-${type}`}
                             key={type}
+                            type={type}
                             title={title}
                             cart={cart}
                             items={ingredients.filter(i => i.type === type)}
                             onItemClick={onItemClick}
+                            onRef={saveRef}
                         />
                     ))}
             </div>
