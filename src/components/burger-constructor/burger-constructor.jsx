@@ -1,38 +1,61 @@
-import { useState } from 'react';
 import {
     Button,
     ConstructorElement,
-    CurrencyIcon,
-    DragIcon,
+    CurrencyIcon
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { PropTypes } from 'prop-types';
-import { PROP_TYPES } from '../../utils/types';
+import { useMemo } from 'react';
+import { useDrop } from 'react-dnd/dist/hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCartItem } from '../../services/reducers/cart-reducer';
+import { fetchOrder, hideOrder } from '../../services/reducers/order-reducer';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
+import CartUtil from './../../services/cart-util';
+import BurgerElement from './burger-element';
 import styles from './constructor.module.css';
 
-export default function BurgerConstructor1({ data }) {
-    const [order, setOrder] = useState();
+export default function BurgerConstructor() {
+    const { data: ingredients } = useSelector(state => state.ingredients);
+    const cart = useSelector(state => state.cart);
+    const order = useSelector(state => state.order);
 
-    const bun = data.find(i => i.type === 'bun');
-    const items = data.filter(i => i.type !== 'bun');
-    const totalPrice = data
-        .map(i => i.price)
-        .reduce((total, price) => total + price, 0);
+    const dispatch = useDispatch();
+
+    const bun = useMemo(
+        () => new CartUtil(cart).getBun(ingredients),
+        [cart, ingredients]
+    );
+    const items = useMemo(
+        () => new CartUtil(cart).getCart(ingredients),
+        [cart, ingredients]
+    );
+    const totalPrice = useMemo(
+        () => new CartUtil(cart).getTotalPrice(ingredients),
+        [cart, ingredients]
+    );
+
+    const [, dropRef] = useDrop(
+        () => ({
+            accept: 'INGREDIENT',
+            canDrop: item => item.is_bun || items.length === 0,
+            drop: item => dispatch(addCartItem(item)),
+        }),
+        [items]
+    );
 
     function onOrderClick() {
-        setOrder(123456);
+        dispatch(fetchOrder(new CartUtil(cart).getIds()));
     }
 
-    function clearOrder() {
-        setOrder(undefined);
+    function closeOrder() {
+        dispatch(hideOrder());
     }
 
     return (
         <>
-            {order && (
-                <Modal onClose={clearOrder}>
-                    <OrderDetails orderNumber={order} />
+            {order.show && (
+                <Modal onClose={closeOrder}>
+                    <OrderDetails />
                 </Modal>
             )}
             <div className={styles.panel}>
@@ -47,16 +70,9 @@ export default function BurgerConstructor1({ data }) {
                         />
                     )}
                 </div>
-                <div className={styles.middle_panel}>
-                    {items.map(item => (
-                        <div key={item._id} className={styles.item}>
-                            <DragIcon type="primary" />
-                            <ConstructorElement
-                                text={item.name}
-                                price={item.price}
-                                thumbnail={item.image}
-                            />
-                        </div>
+                <div className={styles.middle_panel} ref={dropRef}>
+                    {items.map(({ key, item }) => (
+                        <BurgerElement key={key} itemKey={key} item={item} />
                     ))}
                 </div>
                 <div className={styles.bottom_panel}>
@@ -91,7 +107,3 @@ export default function BurgerConstructor1({ data }) {
         </>
     );
 }
-
-BurgerConstructor1.propTypes = {
-    data: PropTypes.arrayOf(PROP_TYPES.burgerIngredient).isRequired,
-};

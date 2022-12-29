@@ -35,5 +35,5 @@ export default function IngredientDetails({ item }) {
 }
 
 IngredientDetails.propTypes = {
-    item: PROP_TYPES.burgerIngredient.isRequired,
+    item: PROP_TYPES.burgerIngredient,
 };

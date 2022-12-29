@@ -54,3 +54,9 @@
     text-align: center;
     height: 48px;
 }
+
+.info {
+    padding: 20px;
+    text-align: center;
+    color: silver;
+}

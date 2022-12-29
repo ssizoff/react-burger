@@ -28,9 +28,17 @@
     margin-bottom: calc(var(--offset-base-size) * 4);
 }
 
+.item_hover {
+    background-color: rgba(153, 153, 153, 0.3) !important;
+}
+
 .total_price {
     margin-top: calc(var(--offset-base-size) * 10);
     display: flex;
     align-items: center;
     justify-content: flex-end;
+}
+
+.element {
+    flex-grow: 1;
 }
