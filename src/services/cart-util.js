@@ -53,7 +53,10 @@ export default class CartUtil {
             const toIdx = this.#items.indexOf(this.byKey(toKey));
             this.#items.splice(toIdx, 0, newItem);
         }
-        else this.#items = [...items, newItem];
+        else {
+            this.#items = [...items, newItem];
+            if (is_bun) this.#items.push({ id, is_bun, extra_id: this.nextExtraId(id) });
+        }
     }
 
     removeByKey(key) {

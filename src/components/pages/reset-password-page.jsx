@@ -19,17 +19,20 @@ export default function ResetPasswordPage() {
 
     const onPasswordChange = e => setPassword(e.target.value);
     const onCodeChange = e => setCode(e.target.value);
-    const onResetClick = () => {
+    const onResetClick = e => {
         apiPasswordResetSubmit(
             password,
             code,
             () => history.push('/login'),
             setError
         );
+        e.preventDefault();
+        return false;
     };
+
     return (
         <div className={`mt-20 ${styles.panel}`}>
-            <div>
+            <form onSubmit={onResetClick}>
                 <p className={`text text_type_main-medium ${styles.header}`}>
                     Восстановление пароля
                 </p>
@@ -53,12 +56,7 @@ export default function ResetPasswordPage() {
                     </p>
                 )}
                 <div className={`mb-20 ${styles.panel}`}>
-                    <Button
-                        htmlType="button"
-                        type="primary"
-                        size="medium"
-                        onClick={onResetClick}
-                    >
+                    <Button htmlType="submit" type="primary" size="medium">
                         Восстановить
                     </Button>
                 </div>
@@ -68,7 +66,7 @@ export default function ResetPasswordPage() {
                     <span>Вспомнили пароль?</span>
                     <Link to="/login">Войти</Link>
                 </p>
-            </div>
+            </form>
         </div>
     );
 }

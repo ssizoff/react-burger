@@ -41,7 +41,7 @@ export default function BurgerConstructor() {
     const [, dropRef] = useDrop(
         () => ({
             accept: 'INGREDIENT',
-            canDrop: item => item.is_bun || items.length === 0,
+            //canDrop: item => item.is_bun || items.length === 0,
             drop: item => dispatch(addCartItem(item)),
         }),
         [items]

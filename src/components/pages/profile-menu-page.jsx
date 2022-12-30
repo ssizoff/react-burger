@@ -1,7 +1,6 @@
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, Switch, useHistory } from 'react-router-dom';
+import { NavLink, Switch } from 'react-router-dom';
 import { fetchLogout } from './../../services/reducers/user-reducer';
 import ProtectedRoute from './../../utils/protected-route';
 import appStyles from './../app/app.module.css';
@@ -12,11 +11,6 @@ import menuStyles from './profile.menu.module.css';
 export default function ProfileMenuPage() {
     const auth = useSelector(state => state.user.auth);
     const dispatch = useDispatch();
-    const history = useHistory();
-
-    useEffect(() => {
-        if (!auth) history.push('/');
-    }, [history, auth]);
 
     const onLogout = () => dispatch(fetchLogout(auth.refreshToken));
 

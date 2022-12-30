@@ -7,6 +7,7 @@ import {
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
+    clearAuthError,
     fetchUser,
     fetchUserPatch,
 } from '../../services/reducers/user-reducer';
@@ -18,6 +19,8 @@ export default function ProfilePage() {
     const [email, setEmail] = useState(user?.email ?? '');
     const [password, setPassword] = useState('');
     const [modified, setModified] = useState(false);
+    const error = useSelector(state => state.user.error);
+
     const dispatch = useDispatch();
 
     const onNameChange = e => {
@@ -37,15 +40,18 @@ export default function ProfilePage() {
         setEmail(user?.email ?? '');
         setModified(false);
     };
-    const onSaveClick = () => {
+    const onSaveClick = e => {
         dispatch(fetchUserPatch({ name, email, password }));
+        e.preventDefault();
+        return false;
     };
 
     useEffect(() => dispatch(fetchUser()), [dispatch]);
     useEffect(() => setModified(false), [user]);
+    useEffect(() => () => dispatch(clearAuthError()), [dispatch]);
 
     return (
-        <div>
+        <form onSubmit={onSaveClick}>
             <Input
                 type="text"
                 placeholder="Имя"
@@ -68,6 +74,11 @@ export default function ProfilePage() {
                 name="password"
                 extraClass="mb-6"
             />
+            {error && (
+                <p className="p-2 text text_type_main-default text_color_error">
+                    {error}
+                </p>
+            )}
             {modified && (
                 <div className={`input_size_default ${styles.panel}`}>
                     <Button
@@ -78,16 +89,11 @@ export default function ProfilePage() {
                     >
                         Отменить
                     </Button>
-                    <Button
-                        htmlType="button"
-                        type="primary"
-                        size="medium"
-                        onClick={onSaveClick}
-                    >
+                    <Button htmlType="submit" type="primary" size="medium">
                         Сохранить
                     </Button>
                 </div>
             )}
-        </div>
+        </form>
     );
 }

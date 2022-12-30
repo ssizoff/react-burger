@@ -2,14 +2,15 @@ import {
     Button,
     EmailInput,
     Input,
-    PasswordInput,
+    PasswordInput
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
+    clearAuthError,
     fetchRegister,
-    setAuthError,
+    setAuthError
 } from './../../services/reducers/user-reducer';
 import styles from './login.module.css';
 
@@ -17,17 +18,16 @@ export default function RegisterPage() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const user = useSelector(state => state.user.profile);
     const error = useSelector(state => state.user.error);
     const dispatch = useDispatch();
-    const history = useHistory();
 
-    useEffect(() => {
-        if (user) history.push('/');
-    }, [history, user]);
+    useEffect(() => () => dispatch(clearAuthError()), [dispatch]);
 
-    const onRegisterClick = () =>
+    const onRegisterClick = e => {
         dispatch(fetchRegister(name, email, password));
+        e.preventDefault();
+        return false;
+    };
     const onNameChange = e => {
         setName(e.target.value);
         dispatch(setAuthError(null));
@@ -43,7 +43,7 @@ export default function RegisterPage() {
 
     return (
         <div className={`mt-20 ${styles.panel}`}>
-            <div>
+            <form onSubmit={onRegisterClick}>
                 <p className={`text text_type_main-medium ${styles.header}`}>
                     Регистрация
                 </p>
@@ -76,12 +76,7 @@ export default function RegisterPage() {
                     </p>
                 )}
                 <div className={`mb-20 ${styles.panel}`}>
-                    <Button
-                        htmlType="button"
-                        type="primary"
-                        size="medium"
-                        onClick={onRegisterClick}
-                    >
+                    <Button htmlType="submit" type="primary" size="medium">
                         Зарегистрироваться
                     </Button>
                 </div>
@@ -91,7 +86,7 @@ export default function RegisterPage() {
                     <span>Уже зарегистрированы?</span>
                     <Link to="/login">Войти</Link>
                 </p>
-            </div>
+            </form>
         </div>
     );
 }

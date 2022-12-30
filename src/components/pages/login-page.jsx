@@ -1,28 +1,31 @@
 import {
     Button,
     EmailInput,
-    PasswordInput,
+    PasswordInput
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { fetchLogin, setAuthError } from '../../services/reducers/user-reducer';
+import { Link } from 'react-router-dom';
+import {
+    clearAuthError,
+    fetchLogin,
+    setAuthError
+} from '../../services/reducers/user-reducer';
 import styles from './login.module.css';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const user = useSelector(state => state.user.profile);
     const error = useSelector(state => state.user.error);
     const dispatch = useDispatch();
-    const history = useHistory();
-    const location = useLocation();
 
-    useEffect(() => {
-        if (user) history.push(location.state?.from ?? '/');
-    }, [history, location, user]);
+    useEffect(() => () => dispatch(clearAuthError()), [dispatch]);
 
-    const onLoginClick = () => dispatch(fetchLogin(email, password));
+    const onLoginClick = e => {
+        dispatch(fetchLogin(email, password));
+        e.preventDefault();
+        return false;
+    };
 
     const onLoginChange = e => {
         setEmail(e.target.value);
@@ -36,7 +39,7 @@ export default function LoginPage() {
 
     return (
         <div className={`mt-20 ${styles.panel}`}>
-            <div>
+            <form onSubmit={onLoginClick}>
                 <p className={`text text_type_main-medium ${styles.header}`}>
                     Вход
                 </p>
@@ -61,12 +64,7 @@ export default function LoginPage() {
                     </p>
                 )}
                 <div className={`mb-20 ${styles.panel}`}>
-                    <Button
-                        htmlType="button"
-                        type="primary"
-                        size="medium"
-                        onClick={onLoginClick}
-                    >
+                    <Button htmlType="submit" type="primary" size="medium">
                         Вход
                     </Button>
                 </div>
@@ -82,7 +80,7 @@ export default function LoginPage() {
                     <span>Забыли пароль?</span>
                     <Link to="/forgot-password">Восстановить пароль</Link>
                 </p>
-            </div>
+            </form>
         </div>
     );
 }

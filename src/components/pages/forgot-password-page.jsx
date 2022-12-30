@@ -1,6 +1,6 @@
 import {
     Button,
-    EmailInput,
+    EmailInput
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
@@ -11,9 +11,9 @@ export default function ForgotPasswordPage() {
     const [email, setEmail] = useState('');
     const [error, setError] = useState();
     const history = useHistory();
-
+   
     const onEmailChange = e => setEmail(e.target.value);
-    const onResetClick = () => {
+    const onResetClick = e => {
         apiPasswordReset(
             email,
             () =>
@@ -23,11 +23,13 @@ export default function ForgotPasswordPage() {
                 }),
             setError
         );
+        e.preventDefault();
+        return false;
     };
 
     return (
         <div className={`mt-20 ${styles.panel}`}>
-            <div>
+            <form onSubmit={onResetClick}>
                 <p className={`text text_type_main-medium ${styles.header}`}>
                     Восстановление пароля
                 </p>
@@ -45,12 +47,7 @@ export default function ForgotPasswordPage() {
                     </p>
                 )}
                 <div className={`mb-20 ${styles.panel}`}>
-                    <Button
-                        htmlType="button"
-                        type="primary"
-                        size="medium"
-                        onClick={onResetClick}
-                    >
+                    <Button htmlType="submit" type="primary" size="medium">
                         Восстановить
                     </Button>
                 </div>
@@ -60,7 +57,7 @@ export default function ForgotPasswordPage() {
                     <span>Вспомнили пароль?</span>
                     <Link to="/login">Войти</Link>
                 </p>
-            </div>
+            </form>
         </div>
     );
 }
