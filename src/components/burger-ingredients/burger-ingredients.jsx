@@ -1,22 +1,17 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import PropTypes from 'prop-types';
-import { useState, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-    clearIngredient,
-    setIngredient,
-} from '../../services/reducers/ingredient-reducer';
+import { useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import { PROP_TYPES } from '../../utils/types';
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import Modal from '../modal/modal';
+import { BURGER_BUN } from './../../utils/data';
 import BurgerGroup from './burger-group';
 import styles from './burger.module.css';
-import { BURGER_BUN } from './../../utils/data';
 
 export default function BurgerIngredients({ types }) {
-    const dispatch = useDispatch();
-    const activeItem = useSelector(state => state.ingredient);
     const cart = useSelector(state => state.cart);
+    const history = useHistory();
+    const location = useLocation();
     const {
         loading,
         error,
@@ -31,11 +26,11 @@ export default function BurgerIngredients({ types }) {
     }
 
     function onItemClick(item) {
-        dispatch(setIngredient(item));
-    }
-
-    function clearActiveItem() {
-        dispatch(clearIngredient());
+        //dispatch(setIngredient(item));
+        history.push({
+            pathname: `/ingredient/${item._id}`,
+            state: { background: location },
+        });
     }
 
     function onTablClick(tabKey) {
@@ -92,12 +87,6 @@ export default function BurgerIngredients({ types }) {
                         />
                     ))}
             </div>
-
-            {activeItem && (
-                <Modal header="Детали ингредиента" onClose={clearActiveItem}>
-                    <IngredientDetails item={activeItem} />
-                </Modal>
-            )}
         </div>
     );
 }

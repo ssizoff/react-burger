@@ -28,7 +28,7 @@ export default function BurgerElement({ itemKey, item }) {
     );
     const [{ isHover }, dropRef] = useDrop(
         () => ({
-            accept: ['INGREDIENT', 'ELEMENT'],
+            accept: 'ELEMENT', //['INGREDIENT', 'ELEMENT'],
             canDrop: ({ key, is_bun }) => !is_bun && key !== itemKey,
             collect: monitor => ({
                 isHover: monitor.canDrop() && monitor.isOver(),
