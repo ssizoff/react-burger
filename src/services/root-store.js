@@ -1,13 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit'
-import ingredient from './reducers/ingredient-reducer';
-import ingredients from './reducers/ingredients-reducer';
+import { configureStore } from '@reduxjs/toolkit';
 import cart from './reducers/cart-reducer';
+import ingredients from './reducers/ingredients-reducer';
 import order from './reducers/order-reducer';
 import user from './reducers/user-reducer';
 
 const store = configureStore({
     reducer: {
-        ingredient,
         ingredients,
         cart,
         order,

@@ -7,6 +7,7 @@ import ProfilePage from './profile-page';
 import RegisterPage from './register-page';
 import ResetPasswordPage from './reset-password-page';
 import OrdersPage from './orders-page';
+import IngredientPage from './ingredient-page';
 
 export {
     Page404,
@@ -18,4 +19,5 @@ export {
     ProfilePage,
     ProfileMenuPage,
     OrdersPage,
+    IngredientPage
 };

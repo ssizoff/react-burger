@@ -62,9 +62,6 @@ export function apiRequestIngredients(onSuccess, onError) {
     sendRequest('ingredients', ({ data }) => onSuccess(data), onError);
 }
 
-export function apiSendOrder(ingredients, onSuccess, onError) {
-    sendRequest('orders', onSuccess, onError, { body: { ingredients } });
-}
 
 export function apiPasswordReset(email, onSuccess, onError) {
     sendRequest('password-reset', onSuccess, onError, { body: { email } });
@@ -93,3 +90,8 @@ export function apiUserGet(onSuccess, onError) {
 export function apiUserPatch(user, onSuccess, onError) {
     sendAuthRequest('auth/user', onSuccess, onError, { body: user, method: "PATCH" });
 }
+
+export function apiSendOrder(ingredients, onSuccess, onError) {
+    sendAuthRequest('orders', onSuccess, onError, { body: { ingredients } });
+}
+

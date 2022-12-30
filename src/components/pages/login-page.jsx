@@ -5,7 +5,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { fetchLogin, setAuthError } from '../../services/reducers/user-reducer';
 import styles from './login.module.css';
 
@@ -16,10 +16,11 @@ export default function LoginPage() {
     const error = useSelector(state => state.user.error);
     const dispatch = useDispatch();
     const history = useHistory();
+    const location = useLocation();
 
     useEffect(() => {
-        if (user) history.push('/');
-    }, [history, user]);
+        if (user) history.push(location.state?.from ?? '/');
+    }, [history, location, user]);
 
     const onLoginClick = () => dispatch(fetchLogin(email, password));
 

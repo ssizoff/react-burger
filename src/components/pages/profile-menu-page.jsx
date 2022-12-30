@@ -1,8 +1,9 @@
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, Route, Switch, useHistory } from 'react-router-dom';
+import { NavLink, Switch, useHistory } from 'react-router-dom';
 import { fetchLogout } from './../../services/reducers/user-reducer';
+import ProtectedRoute from './../../utils/protected-route';
 import appStyles from './../app/app.module.css';
 import styles from './login.module.css';
 import ProfilePage from './profile-page';
@@ -50,13 +51,13 @@ export default function ProfileMenuPage() {
             </nav>
             <div className="ml-15">
                 <Switch>
-                    <Route path="/profile/orders/:id" exact>
+                    <ProtectedRoute path="/profile/orders/:id" exact>
                         <h1>Заказ</h1>
-                    </Route>
-                    <Route path="/profile/orders" exact>
+                    </ProtectedRoute>
+                    <ProtectedRoute path="/profile/orders" exact>
                         <h1>История заказов</h1>
-                    </Route>
-                    <Route path="/profile/logout" exact>
+                    </ProtectedRoute>
+                    <ProtectedRoute path="/profile/logout" exact>
                         <Button
                             htmlType="button"
                             type="primary"
@@ -65,10 +66,10 @@ export default function ProfileMenuPage() {
                         >
                             Выйти
                         </Button>
-                    </Route>
-                    <Route path="/profile" exact>
+                    </ProtectedRoute>
+                    <ProtectedRoute path="/profile" exact>
                         <ProfilePage />
-                    </Route>
+                    </ProtectedRoute>
                 </Switch>
             </div>
         </div>

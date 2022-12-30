@@ -16,7 +16,11 @@ export default function ForgotPasswordPage() {
     const onResetClick = () => {
         apiPasswordReset(
             email,
-            () => history.push('/reset-password'),
+            () =>
+                history.push({
+                    pathname: '/reset-password',
+                    state: { codeSended: true },
+                }),
             setError
         );
     };

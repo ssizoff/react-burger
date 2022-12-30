@@ -4,16 +4,29 @@ import {
     PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation, Redirect } from 'react-router-dom';
+import { apiPasswordResetSubmit } from '../../utils/burger-api';
 import styles from './login.module.css';
 
 export default function ResetPasswordPage() {
     const [password, setPassword] = useState('');
     const [code, setCode] = useState('');
+    const [error, setError] = useState();
+    const history = useHistory();
+    const location = useLocation();
+
+    if (!location.state?.codeSended) return <Redirect to="/forgot-password" />;
 
     const onPasswordChange = e => setPassword(e.target.value);
     const onCodeChange = e => setCode(e.target.value);
-
+    const onResetClick = () => {
+        apiPasswordResetSubmit(
+            password,
+            code,
+            () => history.push('/login'),
+            setError
+        );
+    };
     return (
         <div className={`mt-20 ${styles.panel}`}>
             <div>
@@ -34,8 +47,18 @@ export default function ResetPasswordPage() {
                     placeholder="Введите код из письма"
                     extraClass="mb-6"
                 />
+                {error && (
+                    <p className="p-2 text text_type_main-default text_color_error">
+                        {error}
+                    </p>
+                )}
                 <div className={`mb-20 ${styles.panel}`}>
-                    <Button htmlType="button" type="primary" size="medium">
+                    <Button
+                        htmlType="button"
+                        type="primary"
+                        size="medium"
+                        onClick={onResetClick}
+                    >
                         Восстановить
                     </Button>
                 </div>
