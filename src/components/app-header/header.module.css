@@ -32,3 +32,15 @@
 .innactive {
     color: var(--text-inactive-color) !important;
 }
+
+.link {
+    text-decoration: none;
+    color: #8585AD;
+    display: flex;
+    align-items: center;
+    gap: var(--offset-base-size);
+}
+
+.linkActive {
+    color: #F2F2F3;
+}

@@ -1,0 +1,30 @@
+.header {
+    margin-bottom: calc(var(--offset-base-size) * 6);
+    text-align: center;
+}
+
+.panel {
+    display: flex;
+    justify-content: center;
+    gap: calc(var(--offset-base-size) * 2);
+}
+
+div.panel>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.link {
+    text-decoration: none;
+    display: block;
+    width: 320px;
+    height: 64px;
+    color: #8585AD;
+    display: flex;
+    align-items: center;
+}
+
+.linkActive {
+    color: #F2F2F3;
+}
