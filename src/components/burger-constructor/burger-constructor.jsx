@@ -1,7 +1,7 @@
 import {
     Button,
     ConstructorElement,
-    CurrencyIcon
+    CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useMemo } from 'react';
 import { useDrop } from 'react-dnd/dist/hooks';
@@ -13,11 +13,15 @@ import OrderDetails from '../order-details/order-details';
 import CartUtil from './../../services/cart-util';
 import BurgerElement from './burger-element';
 import styles from './constructor.module.css';
+import { useHistory, useLocation } from 'react-router-dom';
 
 export default function BurgerConstructor() {
     const { data: ingredients } = useSelector(state => state.ingredients);
     const cart = useSelector(state => state.cart);
     const order = useSelector(state => state.order);
+    const { auth } = useSelector(state => state.user);
+    const history = useHistory();
+    const location = useLocation();
 
     const dispatch = useDispatch();
 
@@ -37,14 +41,19 @@ export default function BurgerConstructor() {
     const [, dropRef] = useDrop(
         () => ({
             accept: 'INGREDIENT',
-            canDrop: item => item.is_bun || items.length === 0,
+            //canDrop: item => item.is_bun || items.length === 0,
             drop: item => dispatch(addCartItem(item)),
         }),
         [items]
     );
 
     function onOrderClick() {
-        dispatch(fetchOrder(new CartUtil(cart).getIds()));
+        if (!auth)
+            history.push({
+                pathname: '/login',
+                state: { from: location.pathname },
+            });
+        else dispatch(fetchOrder(new CartUtil(cart).getIds()));
     }
 
     function closeOrder() {

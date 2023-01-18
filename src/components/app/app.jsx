@@ -1,14 +1,27 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { BURGER_TYPES } from '../../utils/data';
+import { Route, Switch, useLocation } from 'react-router-dom';
 import AppHeader from '../app-header/app-header';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
+import {
+    ForgotPasswordPage,
+    IngredientPage,
+    LoginPage,
+    MainPage,
+    OrdersPage,
+    Page404,
+    RegisterPage,
+    ResetPasswordPage,
+} from '../pages';
 import { fetchIngredients } from './../../services/reducers/ingredients-reducer';
+import ModalIngredient from './../modal/modal-ingredient';
+import ProfileMenuPage from './../pages/profile-menu-page';
 import styles from './app.module.css';
+import ProtectedRoute from './../../utils/protected-route';
 
 function App() {
     const dispatch = useDispatch();
+    const location = useLocation();
+    const background = location.state?.background;
 
     useEffect(() => {
         dispatch(fetchIngredients());
@@ -17,14 +30,42 @@ function App() {
     return (
         <>
             <AppHeader />
-
             <main className={styles.main}>
-                <div className={styles.left_panel}>
-                    <BurgerIngredients types={BURGER_TYPES} />
-                </div>
-                <div className={styles.right_panel}>
-                    <BurgerConstructor />
-                </div>
+                <Switch location={background || location}>
+                    <Route path="/orders">
+                        <OrdersPage />
+                    </Route>
+                    <Route path="/ingredient/:id" exact>
+                        <IngredientPage />
+                    </Route>
+                    <ProtectedRoute path="/login" needAuth={false}>
+                        <LoginPage />
+                    </ProtectedRoute>
+                    <ProtectedRoute path="/register" needAuth={false}>
+                        <RegisterPage />
+                    </ProtectedRoute>
+                    <ProtectedRoute path="/forgot-password" needAuth={false}>
+                        <ForgotPasswordPage />
+                    </ProtectedRoute>
+                    <ProtectedRoute path="/reset-password" needAuth={false}>
+                        <ResetPasswordPage />
+                    </ProtectedRoute>
+                    <ProtectedRoute path="/profile">
+                        <ProfileMenuPage />
+                    </ProtectedRoute>
+                    <Route path="/" exact>
+                        <MainPage />
+                    </Route>
+                    <Route>
+                        <Page404 />
+                    </Route>
+                </Switch>
+
+                {background && (
+                    <Route path="/ingredient/:id" exact>
+                        <ModalIngredient />
+                    </Route>
+                )}
             </main>
         </>
     );
