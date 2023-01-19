@@ -1,18 +1,24 @@
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, Switch } from 'react-router-dom';
-import { fetchLogout } from './../../services/reducers/user-reducer';
+import { fetchLogout } from '../../services/reducers/user-reducer';
 import ProtectedRoute from '../../utils/protected-route';
+import { TJWTResponse } from './../../utils/burger-api';
 import appStyles from './../app/app.module.css';
 import styles from './login.module.css';
 import ProfilePage from './profile-page';
 import menuStyles from './profile.menu.module.css';
 
 export default function ProfileMenuPage() {
-    const auth = useSelector(state => state.user.auth);
+    const auth = useSelector<{ user: { auth?: TJWTResponse } }, TJWTResponse | undefined>(
+        state => state.user.auth
+    );
     const dispatch = useDispatch();
 
-    const onLogout = () => dispatch(fetchLogout(auth.refreshToken));
+    const onLogout = () => {
+        // @ts-ignore
+        dispatch(fetchLogout(auth.refreshToken));
+    };
 
     return (
         <div className={`${appStyles.main} ${menuStyles.menu_grid} mt-20`}>

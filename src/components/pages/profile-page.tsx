@@ -4,34 +4,39 @@ import {
     Input,
     PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, SyntheticEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
     clearAuthError,
     fetchUser,
     fetchUserPatch,
 } from '../../services/reducers/user-reducer';
+import { IUser } from '../../utils/burger-api';
 import styles from './login.module.css';
 
 export default function ProfilePage() {
-    const user = useSelector(state => state.user.profile);
+    const user: IUser = useSelector<{ user: { profile: IUser } }, IUser>(
+        state => state.user.profile
+    );
     const [name, setName] = useState(user?.name ?? '');
     const [email, setEmail] = useState(user?.email ?? '');
     const [password, setPassword] = useState('');
     const [modified, setModified] = useState(false);
-    const error = useSelector(state => state.user.error);
+    const error = useSelector<{ user: { error?: string } }, string | undefined>(
+        state => state.user.error
+    );
 
     const dispatch = useDispatch();
 
-    const onNameChange = e => {
+    const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
         setModified(true);
     };
-    const onEmailChange = e => {
+    const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
         setModified(true);
     };
-    const onPasswordChange = e => {
+    const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
         setModified(true);
     };
@@ -40,15 +45,25 @@ export default function ProfilePage() {
         setEmail(user?.email ?? '');
         setModified(false);
     };
-    const onSaveClick = e => {
+    const onSaveClick = (e: SyntheticEvent) => {
+        // @ts-ignore
         dispatch(fetchUserPatch({ name, email, password }));
         e.preventDefault();
         return false;
     };
 
-    useEffect(() => dispatch(fetchUser()), [dispatch]);
+    useEffect(() => {
+        // @ts-ignore
+        dispatch(fetchUser());
+    }, [dispatch]);
     useEffect(() => setModified(false), [user]);
-    useEffect(() => () => dispatch(clearAuthError()), [dispatch]);
+    useEffect(
+        () => () => {
+            // @ts-ignore
+            dispatch(clearAuthError());
+        },
+        [dispatch]
+    );
 
     return (
         <form onSubmit={onSaveClick}>

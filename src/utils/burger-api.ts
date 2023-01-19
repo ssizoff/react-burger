@@ -7,7 +7,8 @@ type TSuccessCallback<T = object> = (data: T) => void;
 type TErrorCallback = (message: any) => void;
 type TRequestProps = RequestInit & { token?: string; bodyObj?: object };
 type TResponseBase = { success: boolean; message?: string };
-type TJWTResponse = { accessToken: string; refreshToken: string };
+
+export type TJWTResponse = { accessToken: string; refreshToken: string };
 
 type TIngredientType = 'bun' | 'sauce' | 'main';
 
