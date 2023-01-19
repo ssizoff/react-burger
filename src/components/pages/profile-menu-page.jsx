@@ -2,7 +2,7 @@ import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, Switch } from 'react-router-dom';
 import { fetchLogout } from './../../services/reducers/user-reducer';
-import ProtectedRoute from './../../utils/protected-route';
+import ProtectedRoute from '../../utils/protected-route';
 import appStyles from './../app/app.module.css';
 import styles from './login.module.css';
 import ProfilePage from './profile-page';

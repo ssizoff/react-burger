@@ -1,15 +1,25 @@
-import PropTypes from 'prop-types';
+import { PropsWithChildren } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route, useLocation } from 'react-router-dom';
+import { IUser } from './burger-api';
+
+export type TProtectedRouteProps = {
+    path: string;
+    exact?: boolean;
+    needAuth?: boolean;
+};
 
 export default function ProtectedRoute({
     path,
     exact,
     children,
     needAuth = true,
-}) {
-    const { pathname, state } = useLocation();
-    const { auth } = useSelector(state => state.user);
+}: PropsWithChildren<TProtectedRouteProps>): JSX.Element {
+    const { pathname, state } = useLocation<{ from?: string }>();
+    const auth: IUser | undefined = useSelector<
+        { user: { auth?: IUser } },
+        IUser | undefined
+    >(state => state.user.auth);
 
     if (needAuth && !auth) {
         return (
@@ -30,9 +40,3 @@ export default function ProtectedRoute({
         </Route>
     );
 }
-
-ProtectedRoute.propTypes = {
-    path: PropTypes.string.isRequired,
-    needAuth: PropTypes.bool,
-    exact: PropTypes.bool,
-};

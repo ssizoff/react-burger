@@ -10,16 +10,26 @@ import { addCartItem } from '../../services/reducers/cart-reducer';
 import { fetchOrder, hideOrder } from '../../services/reducers/order-reducer';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
-import CartUtil from './../../services/cart-util';
+import CartUtil, { TCartItem } from '../../services/cart-util';
 import BurgerElement from './burger-element';
 import styles from './constructor.module.css';
 import { useHistory, useLocation } from 'react-router-dom';
+import { IIngredient, IUser } from '../../utils/burger-api';
 
 export default function BurgerConstructor() {
-    const { data: ingredients } = useSelector(state => state.ingredients);
-    const cart = useSelector(state => state.cart);
-    const order = useSelector(state => state.order);
-    const { auth } = useSelector(state => state.user);
+    const ingredients = useSelector<
+        { ingredients: { data: IIngredient[] } },
+        IIngredient[]
+    >(state => state.ingredients.data);
+    const cart: TCartItem[] = useSelector<{ cart: TCartItem[] }, TCartItem[]>(
+        state => state.cart
+    );
+    const order = useSelector<{ order: { show: boolean } }, { show: boolean }>(
+        state => state.order
+    );
+    const auth: IUser = useSelector<{ user: { auth: IUser } }, IUser>(
+        state => state.user.auth
+    );
     const history = useHistory();
     const location = useLocation();
 
@@ -53,6 +63,7 @@ export default function BurgerConstructor() {
                 pathname: '/login',
                 state: { from: location.pathname },
             });
+        // @ts-ignore
         else dispatch(fetchOrder(new CartUtil(cart).getIds()));
     }
 

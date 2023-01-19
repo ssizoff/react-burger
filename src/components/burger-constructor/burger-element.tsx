@@ -11,10 +11,17 @@ import {
 } from '../../services/reducers/cart-reducer';
 import styles from './constructor.module.css';
 import { useDrop } from 'react-dnd/dist/hooks';
-import { PropTypes } from 'prop-types';
-import { PROP_TYPES } from './../../utils/types';
+import { IIngredient } from '../../utils/burger-api';
 
-export default function BurgerElement({ itemKey, item }) {
+export type TBurgerElementProps = {
+    itemKey: string;
+    item: IIngredient;
+};
+
+export default function BurgerElement({
+    itemKey,
+    item,
+}: TBurgerElementProps): JSX.Element {
     const dispatch = useDispatch();
     const [{ opacity }, dragRef] = useDrag(
         () => ({
@@ -26,7 +33,7 @@ export default function BurgerElement({ itemKey, item }) {
         }),
         [itemKey]
     );
-    const [{ isHover }, dropRef] = useDrop(
+    const [{ isHover }, dropRef] = useDrop<any, any, { isHover: boolean }>(
         () => ({
             accept: 'ELEMENT', //['INGREDIENT', 'ELEMENT'],
             canDrop: ({ key, is_bun }) => !is_bun && key !== itemKey,
@@ -58,8 +65,3 @@ export default function BurgerElement({ itemKey, item }) {
         </div>
     );
 }
-
-BurgerElement.propTypes = {
-    itemKey: PropTypes.string.isRequired,
-    item: PROP_TYPES.burgerIngredient,
-};

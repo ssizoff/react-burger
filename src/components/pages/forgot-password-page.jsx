@@ -4,7 +4,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { apiPasswordReset } from './../../utils/burger-api';
+import { apiPasswordReset } from '../../utils/burger-api';
 import styles from './login.module.css';
 
 export default function ForgotPasswordPage() {
