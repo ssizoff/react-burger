@@ -6,10 +6,13 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import { IUser } from '../../utils/burger-api';
 import styles from './header.module.css';
 
 export default function AppHeader() {
-    const user = useSelector(state => state.user.profile);
+    const user: IUser = useSelector<{ user: { profile: IUser } }, IUser>(
+        state => state.user.profile
+    );
 
     return (
         <header>
@@ -24,7 +27,9 @@ export default function AppHeader() {
                     activeClassName={styles.linkActive}
                 >
                     <BurgerIcon type="secondary" />
-                    <span className="text text_type_main-default">Конструктор</span>
+                    <span className="text text_type_main-default">
+                        Конструктор
+                    </span>
                 </NavLink>
                 <NavLink
                     to="/orders"
@@ -32,7 +37,9 @@ export default function AppHeader() {
                     activeClassName={styles.linkActive}
                 >
                     <ListIcon type="secondary" />
-                    <span className="text text_type_main-default">Лента заказов</span>
+                    <span className="text text_type_main-default">
+                        Лента заказов
+                    </span>
                 </NavLink>
                 <NavLink
                     to={user ? '/profile' : '/login'}

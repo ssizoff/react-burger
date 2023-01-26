@@ -1,15 +1,20 @@
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import IngredientDetails from './../ingredient-details/ingredient-details';
+import { IIngredient } from '../../utils/burger-api';
+import { TLocationState } from '../app/app';
+import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from './modal';
 
 export default function ModalIngredient() {
-    const location = useLocation();
+    const location = useLocation<TLocationState>();
     const history = useHistory();
-    const { id } = useParams();
-    const { data: ingredients } = useSelector(state => state.ingredients);
+    const { id } = useParams<{ id: string }>();
+    const ingredients: IIngredient[] = useSelector<
+        { ingredients: { data: IIngredient[] } },
+        IIngredient[]
+    >(state => state.ingredients.data);
     const item = ingredients.find(i => i._id === id);
-    const background = location.state?.background;
+    const background = location.state.background!;
 
     return (
         <Modal

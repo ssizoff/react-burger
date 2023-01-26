@@ -1,7 +1,13 @@
+import { IIngredient } from '../../utils/burger-api';
 import styles from './ingredient.details.module.css';
-import { PROP_TYPES } from '../../utils/types';
 
-export default function IngredientDetails({ item }) {
+export type TIngredientDetailsProps = {
+    item: IIngredient;
+};
+
+export default function IngredientDetails({
+    item,
+}: TIngredientDetailsProps): JSX.Element {
     return (
         <>
             <img
@@ -33,7 +39,3 @@ export default function IngredientDetails({ item }) {
         </>
     );
 }
-
-IngredientDetails.propTypes = {
-    item: PROP_TYPES.burgerIngredient,
-};

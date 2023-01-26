@@ -1,26 +1,29 @@
 import {
     Button,
-    EmailInput
+    Input,
+    PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { apiPasswordReset } from './../../utils/burger-api';
+import { useState, SyntheticEvent } from 'react';
+import { Link, useHistory, useLocation, Redirect } from 'react-router-dom';
+import { apiPasswordResetSubmit } from '../../utils/burger-api';
 import styles from './login.module.css';
 
-export default function ForgotPasswordPage() {
-    const [email, setEmail] = useState('');
+export default function ResetPasswordPage() {
+    const [password, setPassword] = useState('');
+    const [code, setCode] = useState('');
     const [error, setError] = useState();
     const history = useHistory();
-   
-    const onEmailChange = e => setEmail(e.target.value);
-    const onResetClick = e => {
-        apiPasswordReset(
-            email,
-            () =>
-                history.push({
-                    pathname: '/reset-password',
-                    state: { codeSended: true },
-                }),
+    const location = useLocation<{ codeSended: boolean }>();
+
+    if (!location.state?.codeSended) return <Redirect to="/forgot-password" />;
+
+    const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
+    const onCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => setCode(e.target.value);
+    const onResetClick = (e: SyntheticEvent) => {
+        apiPasswordResetSubmit(
+            password,
+            code,
+            () => history.push('/login'),
             setError
         );
         e.preventDefault();
@@ -33,12 +36,18 @@ export default function ForgotPasswordPage() {
                 <p className={`text text_type_main-medium ${styles.header}`}>
                     Восстановление пароля
                 </p>
-                <EmailInput
-                    onChange={onEmailChange}
-                    value={email}
-                    name="email"
-                    placeholder="Укажите e-mail"
-                    isIcon={false}
+                <PasswordInput
+                    onChange={onPasswordChange}
+                    value={password}
+                    name="password"
+                    placeholder="Введите новый пароль"
+                    extraClass="mb-6"
+                />
+                <Input
+                    onChange={onCodeChange}
+                    value={code}
+                    name="code"
+                    placeholder="Введите код из письма"
                     extraClass="mb-6"
                 />
                 {error && (

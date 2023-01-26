@@ -1,7 +1,7 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 import { apiAuthLogout, apiUserLogin, apiUserPatch } from '../../utils/burger-api';
-import { apiUserRegister, apiUserGet } from './../../utils/burger-api';
+import { apiUserRegister, apiUserGet } from '../../utils/burger-api';
 
 export const initialState = {
     profile: JSON.parse(localStorage.getItem("profile")),
@@ -81,7 +81,7 @@ export const fetchRegister =
 export const fetchUser =
     () =>
         (dispatch) =>
-            apiUserGet(({ user }) => dispatch(setUser(user)),
+            apiUserGet(user => dispatch(setUser(user)),
                 error => dispatch(setAuthError(error))
             );
 

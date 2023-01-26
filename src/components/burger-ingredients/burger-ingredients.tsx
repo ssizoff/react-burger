@@ -1,31 +1,46 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { PROP_TYPES } from '../../utils/types';
-import { BURGER_BUN } from './../../utils/data';
+import { TCartItem } from '../../services/cart-util';
+import { IIngredient } from '../../utils/burger-api';
+import { BURGER_BUN } from '../../utils/data';
 import BurgerGroup from './burger-group';
 import styles from './burger.module.css';
 
-export default function BurgerIngredients({ types }) {
-    const cart = useSelector(state => state.cart);
+export type TBurgerIngredientsProps = {
+    types: Array<{ type: string; title: string }>;
+};
+
+type TIngredientStore = {
+    loading: boolean;
+    error?: string;
+    data?: IIngredient[];
+};
+
+export default function BurgerIngredients({ types }: TBurgerIngredientsProps) {
+    const cart: TCartItem[] = useSelector<{ cart: TCartItem[] }, TCartItem[]>(
+        state => state.cart
+    );
     const history = useHistory();
     const location = useLocation();
     const {
         loading,
         error,
         data: ingredients,
-    } = useSelector(state => state.ingredients);
-    const groupRefs = useRef({});
+    } = useSelector<{ ingredients: TIngredientStore }, TIngredientStore>(
+        state => state.ingredients
+    );
+
+    const groupRefs = useRef<Record<string, HTMLDivElement>>({});
 
     const [activeTab, setActiveTab] = useState(BURGER_BUN);
 
-    function saveRef(group, ref) {
+    function saveRef(group: string, ref: HTMLDivElement) {
         groupRefs.current[group] = ref;
     }
 
-    function onItemClick(item) {
+    function onItemClick(item: IIngredient) {
         //dispatch(setIngredient(item));
         history.push({
             pathname: `/ingredient/${item._id}`,
@@ -33,13 +48,13 @@ export default function BurgerIngredients({ types }) {
         });
     }
 
-    function onTablClick(tabKey) {
+    function onTablClick(tabKey: string) {
         setActiveTab(tabKey);
         const group = groupRefs.current[tabKey];
         group?.scrollIntoView({ behavior: 'smooth' });
     }
 
-    function onScroll(e) {
+    function onScroll(e: any) {
         for (const div of e.target.children)
             if (e.target.scrollTop >= div.offsetTop - e.target.offsetTop)
                 setActiveTab(div.id.split('-')[1]);
@@ -81,7 +96,7 @@ export default function BurgerIngredients({ types }) {
                             type={type}
                             title={title}
                             cart={cart}
-                            items={ingredients.filter(i => i.type === type)}
+                            items={ingredients!.filter(i => i.type === type)}
                             onItemClick={onItemClick}
                             onRef={saveRef}
                         />
@@ -90,7 +105,3 @@ export default function BurgerIngredients({ types }) {
         </div>
     );
 }
-
-BurgerIngredients.propTypes = {
-    types: PropTypes.arrayOf(PROP_TYPES.burgerType).isRequired,
-};

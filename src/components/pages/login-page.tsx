@@ -1,38 +1,47 @@
 import {
     Button,
     EmailInput,
-    PasswordInput
+    PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
     clearAuthError,
     fetchLogin,
-    setAuthError
+    setAuthError,
 } from '../../services/reducers/user-reducer';
 import styles from './login.module.css';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const error = useSelector(state => state.user.error);
+    const error = useSelector<{ user: { error?: string } }, string | undefined>(
+        state => state.user.error
+    );
     const dispatch = useDispatch();
 
-    useEffect(() => () => dispatch(clearAuthError()), [dispatch]);
+    useEffect(
+        () => () => {
+            // @ts-ignore
+            dispatch(clearAuthError());
+        },
+        [dispatch]
+    );
 
-    const onLoginClick = e => {
+    const onLoginClick = (e: SyntheticEvent) => {
+        // @ts-ignore
         dispatch(fetchLogin(email, password));
         e.preventDefault();
         return false;
     };
 
-    const onLoginChange = e => {
+    const onLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
         dispatch(setAuthError(null));
     };
 
-    const onPasswordChange = e => {
+    const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
         dispatch(setAuthError(null));
     };

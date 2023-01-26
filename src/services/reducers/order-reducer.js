@@ -5,6 +5,7 @@ import { apiSendOrder } from '../../utils/burger-api';
 
 export const initialState = {
     show: false,
+    success: false
 };
 
 const orderSlice = createSlice({
@@ -23,7 +24,9 @@ const orderSlice = createSlice({
 export const { setOrder, hideOrder } = orderSlice.actions;
 export default orderSlice.reducer;
 
-export const fetchOrder = (ids) => (dispatch) => apiSendOrder(ids, data => dispatch(setOrder(data)));
+export const fetchOrder = (ids) => (dispatch) => apiSendOrder(ids,
+    order => dispatch(setOrder({ success: true, order })),
+    () => dispatch(setOrder({ success: false })));
 
 
 

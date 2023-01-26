@@ -14,19 +14,19 @@ const cartSlice = createSlice({
             const cart = new CartUtil(state);
 
             cart.addItem(action.payload.id, action.payload.is_bun, action.payload.toKey);
-            return cart.Items;
+            return cart.toArray();
         },
         removeCartItem: (state, action) => {
             const cart = new CartUtil(state);
 
             cart.removeByKey(action.payload);
-            return cart.Items;
+            return cart.toArray();
         },
         reorderCartItem: (state, action) => {
             const cart = new CartUtil(state);
 
             cart.reoderByKey(action.payload.fromKey, action.payload.toKey);
-            return cart.Items;
+            return cart.toArray();
         }
     },
 })

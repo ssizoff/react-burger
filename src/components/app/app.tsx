@@ -12,18 +12,23 @@ import {
     RegisterPage,
     ResetPasswordPage,
 } from '../pages';
-import { fetchIngredients } from './../../services/reducers/ingredients-reducer';
-import ModalIngredient from './../modal/modal-ingredient';
-import ProfileMenuPage from './../pages/profile-menu-page';
+import { fetchIngredients } from '../../services/reducers/ingredients-reducer';
+import ModalIngredient from '../modal/modal-ingredient';
+import ProfileMenuPage from '../pages/profile-menu-page';
 import styles from './app.module.css';
-import ProtectedRoute from './../../utils/protected-route';
+import ProtectedRoute from '../../utils/protected-route';
+import { Location } from 'history';
+
+export type TLocationState = { background?: Location<TLocationState> };
+export type TLocation = Location<TLocationState>;
 
 function App() {
     const dispatch = useDispatch();
-    const location = useLocation();
-    const background = location.state?.background;
+    const location: TLocation = useLocation<TLocationState>();
+    const background: TLocation | undefined = location.state?.background;
 
     useEffect(() => {
+        // @ts-ignore
         dispatch(fetchIngredients());
     }, [dispatch]);
 
