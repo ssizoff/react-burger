@@ -1,34 +1,35 @@
+import { Location } from 'history';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { Route, Switch, useLocation } from 'react-router-dom';
+import { useAppDispatch } from '../../services/root-store';
+import ProtectedRoute from '../../utils/protected-route';
 import AppHeader from '../app-header/app-header';
 import {
     ForgotPasswordPage,
     IngredientPage,
     LoginPage,
     MainPage,
+    OrderInfoPage,
     OrdersPage,
     Page404,
     RegisterPage,
     ResetPasswordPage,
 } from '../pages';
-import { fetchIngredients } from '../../services/reducers/ingredients-reducer';
-import ModalIngredient from '../modal/modal-ingredient';
-import ProfileMenuPage from '../pages/profile-menu-page';
+import ProfileMenuPage from '../pages/profile/profile-menu-page';
+import { fetchIngredients } from './../../services/actions/ingredient-actions';
 import styles from './app.module.css';
-import ProtectedRoute from '../../utils/protected-route';
-import { Location } from 'history';
+import ModalIngredient from './../modal/modal-ingredient';
+import ModalOrder from './../modal/modal-order';
 
-export type TLocationState = { background?: Location<TLocationState> };
+export type TLocationState = { background?: Location };
 export type TLocation = Location<TLocationState>;
 
 function App() {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const location: TLocation = useLocation<TLocationState>();
-    const background: TLocation | undefined = location.state?.background;
+    const background: Location | undefined = location.state?.background;
 
     useEffect(() => {
-        // @ts-ignore
         dispatch(fetchIngredients());
     }, [dispatch]);
 
@@ -36,8 +37,11 @@ function App() {
         <>
             <AppHeader />
             <main className={styles.main}>
-                <Switch location={background || location}>
-                    <Route path="/orders">
+                <Switch location={background ?? location}>
+                    <Route path="/feed/:id" exact>
+                        <OrderInfoPage />
+                    </Route>
+                    <Route path="/feed" exact>
                         <OrdersPage />
                     </Route>
                     <Route path="/ingredient/:id" exact>
@@ -67,9 +71,14 @@ function App() {
                 </Switch>
 
                 {background && (
-                    <Route path="/ingredient/:id" exact>
-                        <ModalIngredient />
-                    </Route>
+                    <Switch>
+                        <Route path="/ingredient/:id" exact>
+                            <ModalIngredient />
+                        </Route>
+                        <Route path="/feed/:id" exact>
+                            <ModalOrder />
+                        </Route>
+                    </Switch>
                 )}
             </main>
         </>

@@ -1,23 +1,31 @@
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, Switch } from 'react-router-dom';
-import { fetchLogout } from '../../services/reducers/user-reducer';
-import ProtectedRoute from '../../utils/protected-route';
-import { TJWTResponse } from './../../utils/burger-api';
-import appStyles from './../app/app.module.css';
-import styles from './login.module.css';
+import { Location } from 'history';
+import { useSelector } from 'react-redux';
+import { NavLink, Switch, useLocation } from 'react-router-dom';
+import { fetchLogout } from '../../../services/reducers/user-reducer';
+import { useAppDispatch } from '../../../services/root-store';
+import { TJWTResponse } from '../../../utils/burger-api';
+import ProtectedRoute from '../../../utils/protected-route';
+import { TLocation, TLocationState } from '../../app/app';
+import appStyles from '../../app/app.module.css';
+import styles from '../login.module.css';
+import ModalOrder from './../../modal/modal-order';
+import ProfileOrderInfoPage from './profile-order-info-page';
+import ProfileOrdersPage from './profile-orders-page';
 import ProfilePage from './profile-page';
 import menuStyles from './profile.menu.module.css';
 
 export default function ProfileMenuPage() {
-    const auth = useSelector<{ user: { auth?: TJWTResponse } }, TJWTResponse | undefined>(
-        state => state.user.auth
-    );
-    const dispatch = useDispatch();
+    const auth = useSelector<
+        { user: { auth?: TJWTResponse } },
+        TJWTResponse | undefined
+    >(state => state.user.auth);
+    const location: TLocation = useLocation<TLocationState>();
+    const background: Location | undefined = location.state?.background;
+    const dispatch = useAppDispatch();
 
     const onLogout = () => {
-        // @ts-ignore
-        dispatch(fetchLogout(auth.refreshToken));
+        dispatch(fetchLogout(auth!.refreshToken));
     };
 
     return (
@@ -50,12 +58,12 @@ export default function ProfileMenuPage() {
                 </p>
             </nav>
             <div className="ml-15">
-                <Switch>
+                <Switch location={background ?? location}>
                     <ProtectedRoute path="/profile/orders/:id" exact>
-                        <h1>Заказ</h1>
+                        <ProfileOrderInfoPage />
                     </ProtectedRoute>
-                    <ProtectedRoute path="/profile/orders" exact>
-                        <h1>История заказов</h1>
+                    <ProtectedRoute path="/profile/orders">
+                        <ProfileOrdersPage />
                     </ProtectedRoute>
                     <ProtectedRoute path="/profile/logout" exact>
                         <Button
@@ -71,6 +79,11 @@ export default function ProfileMenuPage() {
                         <ProfilePage />
                     </ProtectedRoute>
                 </Switch>
+                {background && (
+                    <ProtectedRoute path="/profile/orders/:id" exact>
+                        <ModalOrder />
+                    </ProtectedRoute>
+                )}
             </div>
         </div>
     );

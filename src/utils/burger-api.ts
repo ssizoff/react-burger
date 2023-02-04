@@ -9,6 +9,7 @@ type TRequestProps = RequestInit & { token?: string; bodyObj?: object };
 type TResponseBase = { success: boolean; message?: string };
 
 export type TJWTResponse = { accessToken: string; refreshToken: string };
+export type TAuth = TJWTResponse;
 
 type TIngredientType = 'bun' | 'sauce' | 'main';
 
@@ -24,6 +25,7 @@ export interface IIngredient {
     price: number;
     image: string;
     image_large: string;
+    image_mobile: string;
 
     proteins: number;
     fat: number;
@@ -42,6 +44,10 @@ export interface IOrder {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export type TOrderShort = Omit<IOrder, 'ingredients'> & {
+    ingredients: string[];
+};
 
 function sendRequest<T = object>(
     url: string,
@@ -105,7 +111,7 @@ function sendAuthRequest<T = object>(
             if (iterationIndex > 2) onError(err);
             else {
                 apiAuthRefresh(
-                    auth.refreshToken,
+                    auth!.refreshToken,
                     ({ accessToken, refreshToken }) => {
                         store.dispatch(
                             setAuthToken({ accessToken, refreshToken })
@@ -126,7 +132,7 @@ function sendAuthRequest<T = object>(
 
     sendRequest<T>(url, onSuccess, error, {
         ...props,
-        token: auth.accessToken,
+        token: auth!.accessToken,
     });
 }
 
@@ -164,7 +170,7 @@ export function apiUserRegister(
     name: string,
     email: string,
     password: string,
-    onSuccess: TSuccessCallback,
+    onSuccess: TSuccessCallback<TAuth>,
     onError: TErrorCallback
 ) {
     sendRequest('auth/register', onSuccess, onError, {
@@ -175,7 +181,7 @@ export function apiUserRegister(
 export function apiUserLogin(
     email: string,
     password: string,
-    onSuccess: TSuccessCallback,
+    onSuccess: TSuccessCallback<{ user: IUser } & TAuth>,
     onError: TErrorCallback
 ) {
     sendRequest('auth/login', onSuccess, onError, {
@@ -204,17 +210,22 @@ export function apiUserGet(
 
 export function apiUserPatch(
     user: IUser,
-    onSuccess: TSuccessCallback,
+    onSuccess: TSuccessCallback<IUser>,
     onError: TErrorCallback
 ) {
-    sendAuthRequest('auth/user', onSuccess, onError, {
-        bodyObj: user,
-        method: 'PATCH',
-    });
+    sendAuthRequest<{ user: IUser }>(
+        'auth/user',
+        ({ user }) => onSuccess(user),
+        onError,
+        {
+            bodyObj: user,
+            method: 'PATCH',
+        }
+    );
 }
 
 export function apiSendOrder(
-    ingredients: IIngredient[],
+    ingredients: string[],
     onSuccess: TSuccessCallback<IOrder>,
     onError: TErrorCallback
 ) {

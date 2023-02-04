@@ -32,7 +32,7 @@ export default function AppHeader() {
                     </span>
                 </NavLink>
                 <NavLink
-                    to="/orders"
+                    to="/feed"
                     className={styles.link}
                     activeClassName={styles.linkActive}
                 >

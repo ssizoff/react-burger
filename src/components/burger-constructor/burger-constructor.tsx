@@ -1,20 +1,22 @@
 import {
     Button,
     ConstructorElement,
-    CurrencyIcon
+    CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useMemo } from 'react';
 import { useDrop } from 'react-dnd/dist/hooks';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import CartUtil, { TCartItem } from '../../services/cart-util';
 import { addCartItem } from '../../services/reducers/cart-reducer';
-import { fetchOrder, hideOrder } from '../../services/reducers/order-reducer';
+import { hideOrder } from '../../services/reducers/order-reducer';
+import { useAppDispatch } from '../../services/root-store';
 import { IIngredient, TJWTResponse } from '../../utils/burger-api';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import BurgerElement from './burger-element';
 import styles from './constructor.module.css';
+import { fetchOrder } from './../../services/actions/order-actions';
 
 export default function BurgerConstructor() {
     const ingredients = useSelector<
@@ -34,7 +36,7 @@ export default function BurgerConstructor() {
     const history = useHistory();
     const location = useLocation();
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const bun = useMemo(
         () => new CartUtil(cart).getBun(ingredients),
@@ -53,7 +55,7 @@ export default function BurgerConstructor() {
         () => ({
             accept: 'INGREDIENT',
             //canDrop: item => item.is_bun || items.length === 0,
-            drop: item => dispatch(addCartItem(item)),
+            drop: (item: TCartItem) => dispatch(addCartItem(item)),
         }),
         [items]
     );
@@ -64,7 +66,6 @@ export default function BurgerConstructor() {
                 pathname: '/login',
                 state: { from: location.pathname },
             });
-        // @ts-ignore
         else dispatch(fetchOrder(new CartUtil(cart).getIds()));
     }
 
