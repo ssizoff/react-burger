@@ -1,8 +1,8 @@
-import { WS_CLOSE, WS_START } from './../socketMiddleware';
+import { wsOrderActions } from '../reducers/socket-reducer';
 
 export function socketStart(token?: string) {
     return {
-        type: WS_START,
+        type: wsOrderActions.wsStart,
         payload: token
             ? `wss://norma.nomoreparties.space/orders?token=${token}`
             : 'wss://norma.nomoreparties.space/orders/all',
@@ -10,5 +10,5 @@ export function socketStart(token?: string) {
 }
 
 export function socketStop() {
-    return { type: WS_CLOSE };
+    return { type: wsOrderActions.wsClose };
 }

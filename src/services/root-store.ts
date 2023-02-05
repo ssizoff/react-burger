@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import cart from './reducers/cart-reducer';
 import ingredients from './reducers/ingredients-reducer';
 import order from './reducers/order-reducer';
-import socket from './reducers/socket-reducer';
+import socket, { wsOrderActions } from './reducers/socket-reducer';
 import user from './reducers/user-reducer';
 import { socketMiddleware } from './socketMiddleware';
 
@@ -17,7 +17,7 @@ const store = configureStore({
     },
     devTools: true,
     middleware: getDefaultMiddleware =>
-        getDefaultMiddleware().concat(socketMiddleware),
+        getDefaultMiddleware().concat(socketMiddleware(wsOrderActions)),
 });
 
 export default store;

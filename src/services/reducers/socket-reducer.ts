@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TOrderShort } from '../../utils/burger-api';
+import { TSocketActions } from '../socketMiddleware';
 
 export type TSocketMessage = {
     success: boolean;
@@ -49,3 +50,11 @@ const socketSlice = createSlice({
 
 export const { setReadyState, receiveSocketMessage } = socketSlice.actions;
 export default socketSlice.reducer;
+
+export const wsOrderActions: TSocketActions = {
+    wsStart: 'ORDER/WS_START',
+    wsClose: 'ORDER/WS_CLOSE',
+    wsSend: 'ORDER/WS_SEND',
+    onMessage: receiveSocketMessage.type,
+    onReadyState: setReadyState.type,
+};
