@@ -1,14 +1,13 @@
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Location } from 'history';
-import { useSelector } from 'react-redux';
 import { NavLink, Switch, useLocation } from 'react-router-dom';
-import { fetchLogout } from '../../../services/reducers/user-reducer';
+import { fetchLogout } from '../../../services/actions/user-actions';
 import { useAppDispatch } from '../../../services/root-store';
-import { TJWTResponse } from '../../../utils/burger-api';
 import ProtectedRoute from '../../../utils/protected-route';
 import { TLocation, TLocationState } from '../../app/app';
 import appStyles from '../../app/app.module.css';
 import styles from '../login.module.css';
+import { useAppSelector } from './../../../services/root-store';
 import ModalOrder from './../../modal/modal-order';
 import ProfileOrderInfoPage from './profile-order-info-page';
 import ProfileOrdersPage from './profile-orders-page';
@@ -16,10 +15,7 @@ import ProfilePage from './profile-page';
 import menuStyles from './profile.menu.module.css';
 
 export default function ProfileMenuPage() {
-    const auth = useSelector<
-        { user: { auth?: TJWTResponse } },
-        TJWTResponse | undefined
-    >(state => state.user.auth);
+    const auth = useAppSelector(state => state.user.auth);
     const location: TLocation = useLocation<TLocationState>();
     const background: Location | undefined = location.state?.background;
     const dispatch = useAppDispatch();

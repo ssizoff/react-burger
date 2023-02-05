@@ -4,21 +4,17 @@ import {
     PasswordInput
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-    clearAuthError,
-    fetchLogin
-} from '../../services/reducers/user-reducer';
+import { fetchLogin } from '../../services/actions/user-actions';
+import { clearAuthError } from '../../services/reducers/user-reducer';
 import { useAppDispatch } from '../../services/root-store';
+import { useAppSelector } from './../../services/root-store';
 import styles from './login.module.css';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const error = useSelector<{ user: { error?: string } }, string | undefined>(
-        state => state.user.error
-    );
+    const error = useAppSelector(state => state.user.error);
     const dispatch = useAppDispatch();
 
     useEffect(

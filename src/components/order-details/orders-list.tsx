@@ -2,25 +2,20 @@ import {
     CurrencyIcon,
     FormattedDate,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { TSocketState } from '../../services/reducers/socket-reducer';
-import { RootState } from '../../services/root-store';
 import { IIngredient } from '../../utils/burger-api';
 import IngredientIcon from '../burger-ingredients/ingredient-icon';
+import { useAppSelector } from './../../services/root-store';
 import { OrderStatus } from './order-info';
 import styles from './orders.list.module.css';
 
 export default function OrdersList({ path = 'feed' }: { path?: string }) {
     const location = useLocation();
     const history = useHistory();
-    const { orders } = useSelector<RootState, TSocketState>(
-        state => state.socket
+    const { orders } = useAppSelector(state => state.socket);
+    const ingredientsAll: IIngredient[] = useAppSelector(
+        state => state.ingredients.data
     );
-    const ingredientsAll: IIngredient[] = useSelector<
-        { ingredients: { data: IIngredient[] } },
-        IIngredient[]
-    >(state => state.ingredients.data);
 
     function calcCount(items: string[]): Record<string, number> {
         const result = items.reduce<any>(

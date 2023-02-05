@@ -1,28 +1,13 @@
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { TSocketState } from '../../services/reducers/socket-reducer';
-import { RootState, useAppDispatch } from '../../services/root-store';
-import { WS_CLOSE, WS_START } from './../../services/socketMiddleware';
+import { useSocket } from './../../services/hooks/useSocket';
+import { useAppSelector } from './../../services/root-store';
 import OrdersList from './../order-details/orders-list';
 import stylesMain from './main.module.css';
 import styles from './orders.module.css';
 
 export default function OrdersPage() {
-    const dispatch = useAppDispatch();
-    const { orders, total, totalToday } = useSelector<RootState, TSocketState>(
-        state => state.socket
-    );
+    const { orders, total, totalToday } = useAppSelector(state => state.socket);
 
-    useEffect(() => {
-        dispatch({
-            type: WS_START,
-            payload: 'wss://norma.nomoreparties.space/orders/all',
-        });
-
-        return () => {
-            dispatch({ type: WS_CLOSE });
-        };
-    }, [dispatch]);
+    useSocket();
 
     return (
         <>

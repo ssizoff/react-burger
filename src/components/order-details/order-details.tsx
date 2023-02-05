@@ -1,16 +1,12 @@
 import {
     CheckMarkIcon,
-    CloseIcon,
+    CloseIcon
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
-import { IOrder } from './../../utils/burger-api';
+import { useAppSelector } from './../../services/root-store';
 import styles from './order.details.module.css';
 
 export default function OrderDetails() {
-    const { success, order } = useSelector<
-        { order: { success: boolean; order?: IOrder } },
-        { success: boolean; order?: IOrder }
-    >(state => state.order);
+    const { success, order } = useAppSelector(state => state.order);
 
     return (
         <>

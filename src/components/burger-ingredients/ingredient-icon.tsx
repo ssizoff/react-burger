@@ -1,5 +1,5 @@
-import { useSelector } from 'react-redux';
 import { IIngredient } from '../../utils/burger-api';
+import { useAppSelector } from './../../services/root-store';
 import styles from './icon.module.css';
 
 export type TIngredientIconProps = {
@@ -13,10 +13,9 @@ export default function IngredientIcon({
     count = 1,
     className,
 }: TIngredientIconProps): JSX.Element | null {
-    const ingredients: IIngredient[] = useSelector<
-        { ingredients: { data: IIngredient[] } },
-        IIngredient[]
-    >(state => state.ingredients.data);
+    const ingredients: IIngredient[] = useAppSelector(
+        state => state.ingredients.data
+    );
 
     const ingredient = ingredients.find(i => i._id === ingredientId);
 

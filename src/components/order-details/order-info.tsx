@@ -1,11 +1,10 @@
 import {
     CurrencyIcon,
-    FormattedDate,
+    FormattedDate
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../services/root-store';
-import { IIngredient, TOrderShort } from '../../utils/burger-api';
+import { IIngredient } from '../../utils/burger-api';
 import IngredientIcon from '../burger-ingredients/ingredient-icon';
+import { useAppSelector } from './../../services/root-store';
 import styles from './order.info.module.css';
 
 export type TOrderInfo = {
@@ -38,13 +37,10 @@ export function OrderStatus({
 }
 
 export default function OrderInfo({ orderId }: TOrderInfo) {
-    const ingredients: IIngredient[] = useSelector<
-        { ingredients: { data: IIngredient[] } },
-        IIngredient[]
-    >(state => state.ingredients.data);
-    const orders = useSelector<RootState, TOrderShort[] | undefined>(
-        state => state.socket.orders
+    const ingredients: IIngredient[] = useAppSelector(
+        state => state.ingredients.data
     );
+    const orders = useAppSelector(state => state.socket.orders);
     const order = orders?.find(i => i._id === orderId);
 
     if (!order) return <p className="text text_type_main-medium">Не найдено</p>;
@@ -62,7 +58,10 @@ export default function OrderInfo({ orderId }: TOrderInfo) {
 
             <div className={styles.container}>
                 <p className="text text_type_main-medium mb-3">{order.name}</p>
-                <OrderStatus status={order.status} className="mb-15 text_color_success" />
+                <OrderStatus
+                    status={order.status}
+                    className="mb-15 text_color_success"
+                />
                 <p className="text text_type_main-medium mb-6">Состав:</p>
 
                 <div className={styles.panel}>

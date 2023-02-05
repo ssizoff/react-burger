@@ -1,17 +1,11 @@
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import { useAppSelector } from './../../services/root-store';
 import styles from './login.module.css';
-import { IIngredient } from '../../utils/burger-api';
 
 export default function IngredientPage() {
     const { id } = useParams<{ id: string }>();
-    const ingredients = useSelector<
-        {
-            ingredients: { data: IIngredient[] };
-        },
-        IIngredient[]
-    >(state => state.ingredients.data);
+    const ingredients = useAppSelector(state => state.ingredients.data);
     const item = ingredients.find(i => i._id === id);
 
     return (

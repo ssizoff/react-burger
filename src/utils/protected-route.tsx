@@ -1,7 +1,6 @@
 import { PropsWithChildren } from 'react';
-import { useSelector } from 'react-redux';
 import { Redirect, Route, useLocation } from 'react-router-dom';
-import { TJWTResponse } from './burger-api';
+import { useAppSelector } from './../services/root-store';
 
 export type TProtectedRouteProps = {
     path: string;
@@ -16,10 +15,7 @@ export default function ProtectedRoute({
     needAuth = true,
 }: PropsWithChildren<TProtectedRouteProps>): JSX.Element {
     const { pathname, state } = useLocation<{ from?: string }>();
-    const auth = useSelector<
-        { user: { auth?: TJWTResponse } },
-        TJWTResponse | undefined
-    >(state => state.user.auth);
+    const auth = useAppSelector(state => state.user.auth);
 
     if (needAuth && !auth) {
         return (

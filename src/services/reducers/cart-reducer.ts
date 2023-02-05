@@ -36,9 +36,12 @@ const cartSlice = createSlice({
             cart.reoderByKey(action.payload.fromKey, action.payload.toKey);
             return cart.toArray();
         },
+        clearCart: state => {
+            return [];
+        },
     },
 });
 
-export const { addCartItem, removeCartItem, reorderCartItem } =
+export const { addCartItem, removeCartItem, reorderCartItem, clearCart } =
     cartSlice.actions;
 export default cartSlice.reducer;

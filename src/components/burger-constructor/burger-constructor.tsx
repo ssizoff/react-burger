@@ -1,38 +1,27 @@
 import {
     Button,
     ConstructorElement,
-    CurrencyIcon,
+    CurrencyIcon
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useMemo } from 'react';
 import { useDrop } from 'react-dnd/dist/hooks';
-import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import CartUtil, { TCartItem } from '../../services/cart-util';
 import { addCartItem } from '../../services/reducers/cart-reducer';
 import { hideOrder } from '../../services/reducers/order-reducer';
 import { useAppDispatch } from '../../services/root-store';
-import { IIngredient, TJWTResponse } from '../../utils/burger-api';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
+import { fetchOrder } from './../../services/actions/order-actions';
+import { useAppSelector } from './../../services/root-store';
 import BurgerElement from './burger-element';
 import styles from './constructor.module.css';
-import { fetchOrder } from './../../services/actions/order-actions';
 
 export default function BurgerConstructor() {
-    const ingredients = useSelector<
-        { ingredients: { data: IIngredient[] } },
-        IIngredient[]
-    >(state => state.ingredients.data);
-    const cart: TCartItem[] = useSelector<{ cart: TCartItem[] }, TCartItem[]>(
-        state => state.cart
-    );
-    const order = useSelector<{ order: { show: boolean } }, { show: boolean }>(
-        state => state.order
-    );
-    const auth = useSelector<
-        { user: { auth?: TJWTResponse } },
-        TJWTResponse | undefined
-    >(state => state.user.auth);
+    const ingredients = useAppSelector(state => state.ingredients.data);
+    const cart: TCartItem[] = useAppSelector(state => state.cart);
+    const order = useAppSelector(state => state.order);
+    const auth = useAppSelector(state => state.user.auth);
     const history = useHistory();
     const location = useLocation();
 

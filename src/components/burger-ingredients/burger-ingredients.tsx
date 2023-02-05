@@ -1,10 +1,10 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { TCartItem } from '../../services/cart-util';
 import { IIngredient } from '../../utils/burger-api';
 import { BURGER_BUN } from '../../utils/data';
+import { useAppSelector } from './../../services/root-store';
 import BurgerGroup from './burger-group';
 import styles from './burger.module.css';
 
@@ -12,25 +12,15 @@ export type TBurgerIngredientsProps = {
     types: Array<{ type: string; title: string }>;
 };
 
-type TIngredientStore = {
-    loading: boolean;
-    error?: string;
-    data?: IIngredient[];
-};
-
 export default function BurgerIngredients({ types }: TBurgerIngredientsProps) {
-    const cart: TCartItem[] = useSelector<{ cart: TCartItem[] }, TCartItem[]>(
-        state => state.cart
-    );
+    const cart: TCartItem[] = useAppSelector(state => state.cart);
     const history = useHistory();
     const location = useLocation();
     const {
         loading,
         error,
         data: ingredients,
-    } = useSelector<{ ingredients: TIngredientStore }, TIngredientStore>(
-        state => state.ingredients
-    );
+    } = useAppSelector(state => state.ingredients);
 
     const groupRefs = useRef<Record<string, HTMLDivElement>>({});
 

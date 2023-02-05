@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import cart from './reducers/cart-reducer';
 import ingredients from './reducers/ingredients-reducer';
 import order from './reducers/order-reducer';
-import user from './reducers/user-reducer';
 import socket from './reducers/socket-reducer';
+import user from './reducers/user-reducer';
 import { socketMiddleware } from './socketMiddleware';
 
 const store = configureStore({
@@ -23,4 +23,7 @@ const store = configureStore({
 export default store;
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
 export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: <T>(selector: (state: RootState) => T) => T =
+    useSelector;
