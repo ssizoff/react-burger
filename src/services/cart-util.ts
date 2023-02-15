@@ -11,8 +11,11 @@ export default class CartUtil {
     static itemKey(item: TCartItem): string {
         return `${item.id}#${item.extra_id}`;
     }
+    private _items: TCartItem[];
 
-    constructor(private _items: TCartItem[]) {}
+    constructor(items: TCartItem[]) {
+        this._items = [...items];
+    }
 
     getIds(): string[] {
         return this._items.map(i => i.id);

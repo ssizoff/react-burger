@@ -3,12 +3,20 @@
     // Наведите указатель мыши, чтобы просмотреть описания существующих атрибутов.
     // Для получения дополнительной информации посетите: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [{
+    "configurations": [
+
+        {
             "command": "npm start",
             "name": "Run npm start",
             "request": "launch",
             "type": "node-terminal"
         },
+        {
+            "command": "npm test",
+            "name": "Run test",
+            "request": "launch",
+            "type": "node-terminal"
+        },        
         {
             "command": "npm run deploy",
             "name": "Run npm deploy",
