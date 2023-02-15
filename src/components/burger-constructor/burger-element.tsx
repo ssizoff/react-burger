@@ -1,17 +1,17 @@
 import {
     ConstructorElement,
-    DragIcon,
+    DragIcon
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDrag } from 'react-dnd';
-import { useDispatch } from 'react-redux';
+import { useDrop } from 'react-dnd/dist/hooks';
 import {
     addCartItem,
     removeCartItem,
-    reorderCartItem,
+    reorderCartItem
 } from '../../services/reducers/cart-reducer';
-import styles from './constructor.module.css';
-import { useDrop } from 'react-dnd/dist/hooks';
+import { useAppDispatch } from '../../services/root-store';
 import { IIngredient } from '../../utils/burger-api';
+import styles from './constructor.module.css';
 
 export type TBurgerElementProps = {
     itemKey: string;
@@ -22,7 +22,7 @@ export default function BurgerElement({
     itemKey,
     item,
 }: TBurgerElementProps): JSX.Element {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const [{ opacity }, dragRef] = useDrag(
         () => ({
             type: 'ELEMENT',

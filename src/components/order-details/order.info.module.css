@@ -1,0 +1,25 @@
+.container {
+    text-align: left;
+}
+
+.panel {
+    overflow-y: auto;
+    max-height: 30vh;
+}
+
+.name {
+    margin-right: auto;
+}
+
+.price {
+    display: flex;
+    align-items: center;
+    gap: var(--offset-base-size);
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--offset-base-size) * 4);
+    margin-bottom: calc(var(--offset-base-size) * 4);
+}

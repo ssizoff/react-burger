@@ -5,36 +5,27 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useMemo } from 'react';
 import { useDrop } from 'react-dnd/dist/hooks';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import CartUtil, { TCartItem } from '../../services/cart-util';
 import { addCartItem } from '../../services/reducers/cart-reducer';
-import { fetchOrder, hideOrder } from '../../services/reducers/order-reducer';
-import { IIngredient, TJWTResponse } from '../../utils/burger-api';
+import { hideOrder } from '../../services/reducers/order-reducer';
+import { useAppDispatch } from '../../services/root-store';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
+import { fetchOrder } from './../../services/actions/order-actions';
+import { useAppSelector } from './../../services/root-store';
 import BurgerElement from './burger-element';
 import styles from './constructor.module.css';
 
 export default function BurgerConstructor() {
-    const ingredients = useSelector<
-        { ingredients: { data: IIngredient[] } },
-        IIngredient[]
-    >(state => state.ingredients.data);
-    const cart: TCartItem[] = useSelector<{ cart: TCartItem[] }, TCartItem[]>(
-        state => state.cart
-    );
-    const order = useSelector<{ order: { show: boolean } }, { show: boolean }>(
-        state => state.order
-    );
-    const auth = useSelector<
-        { user: { auth?: TJWTResponse } },
-        TJWTResponse | undefined
-    >(state => state.user.auth);
+    const ingredients = useAppSelector(state => state.ingredients.data);
+    const cart: TCartItem[] = useAppSelector(state => state.cart);
+    const order = useAppSelector(state => state.order);
+    const auth = useAppSelector(state => state.user.auth);
     const history = useHistory();
     const location = useLocation();
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const bun = useMemo(
         () => new CartUtil(cart).getBun(ingredients),
@@ -53,7 +44,7 @@ export default function BurgerConstructor() {
         () => ({
             accept: 'INGREDIENT',
             //canDrop: item => item.is_bun || items.length === 0,
-            drop: item => dispatch(addCartItem(item)),
+            drop: (item: TCartItem) => dispatch(addCartItem(item)),
         }),
         [items]
     );
@@ -64,7 +55,6 @@ export default function BurgerConstructor() {
                 pathname: '/login',
                 state: { from: location.pathname },
             });
-        // @ts-ignore
         else dispatch(fetchOrder(new CartUtil(cart).getIds()));
     }
 
