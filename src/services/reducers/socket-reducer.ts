@@ -11,8 +11,6 @@ export type TSocketMessage = {
 
 export type TSocketState = {
     readyState: number;
-    messages: TSocketMessage[];
-    lastMessage?: TSocketMessage;
     orders: TOrderShort[];
     total: number;
     totalToday: number;
@@ -20,7 +18,6 @@ export type TSocketState = {
 
 export const initialState: TSocketState = {
     readyState: -1,
-    messages: [],
     orders: [],
     total: 0,
     totalToday: 0,
@@ -38,8 +35,6 @@ const socketSlice = createSlice({
             { payload: message }: PayloadAction<TSocketMessage>
         ) => {
             if (message.success) {
-                state.lastMessage = message;
-                state.messages = state.messages.concat(message);
                 if (message.orders) state.orders = message.orders;
                 if (message.total) state.total = message.total;
                 if (message.totalToday) state.totalToday = message.totalToday;

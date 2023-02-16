@@ -1,8 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-    IUser,
-    TAuth
-} from '../../utils/burger-api';
+import { IUser, TAuth } from '../../utils/burger-api';
 
 type TUserState = {
     auth?: TAuth;
@@ -15,14 +12,14 @@ function fromLS<T>(name: string): T | undefined {
     if (val) return JSON.parse(val) as T;
 }
 
-export const initialState: TUserState = {
+export const userInitialState: () => TUserState = () => ({
     auth: fromLS<TAuth>('auth'),
     profile: fromLS<IUser>('profile'),
-};
+});
 
 const userSlice = createSlice({
     name: 'user',
-    initialState,
+    initialState: userInitialState(),
     reducers: {
         setUser: (state, action: PayloadAction<IUser | undefined>) => {
             state.error = undefined;
@@ -52,5 +49,3 @@ const userSlice = createSlice({
 export const { setUser, setAuthToken, setAuthError, clearAuthError } =
     userSlice.actions;
 export default userSlice.reducer;
-
-
