@@ -32,6 +32,7 @@ export default function BurgerItem({
 
     return (
         <div
+            data-testid="ingredient-card"
             className={styles.item}
             onClick={() => onItemClick(item)}
             ref={dragRef}
@@ -49,7 +50,7 @@ export default function BurgerItem({
                 <p className="text text_type_digits-default">{price}</p>
                 <CurrencyIcon type="primary" />
             </div>
-            <p className={`text text_type_main-default ${styles.title}`}>
+            <p data-testid="ingredient-name" className={`text text_type_main-default ${styles.title}`}>
                 {name}
             </p>
         </div>

@@ -15,7 +15,7 @@ export default function IngredientDetails({
                 src={item.image_large}
                 className={styles.image}
             />
-            <p className="text text_type_main-default mb-8">{item.name}</p>
+            <p data-testid="ingredient-name" className="text text_type_main-default mb-8">{item.name}</p>
             <div className={`text text_color_inactive ${styles.nutrition}`}>
                 <div>
                     <p className="pb-2">Калории,ккал</p>

@@ -32,7 +32,7 @@ export default function Modal({
         container &&
         ReactDOM.createPortal(
             <>
-                <div className={styles.modal}>
+                <div data-testid="modal-window" className={styles.modal}>
                     <ModalHeader onClose={onClose}>{header}</ModalHeader>
                     <div className={styles.body}>{children}</div>
                 </div>

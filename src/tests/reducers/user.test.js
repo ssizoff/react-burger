@@ -30,6 +30,7 @@ describe('User reducer', () => {
                     getItem: jest.fn(key => `{"key":"${key}"}`),
                     setItem: jest.fn((key, value) => { }),
                     removeItem: jest.fn(),
+                    clear: jest.fn(),
                 },
             });
 
@@ -39,6 +40,26 @@ describe('User reducer', () => {
             .toEqual({ ...state, profile: user });
         expect(window.localStorage.setItem).toHaveBeenCalledWith("profile", JSON.stringify(user));
     });
+
+    it('Clear user', () => {
+        Object.defineProperty(window,
+            "localStorage",
+            {
+                value: {
+                    getItem: jest.fn(key => `{"key":"${key}"}`),
+                    setItem: jest.fn((key, value) => { }),
+                    removeItem: jest.fn(),
+                    clear: jest.fn(),
+                },
+            });
+
+        const state = userInitialState();
+       
+        expect(userReducer(state, setUser()))
+            .toEqual({ ...state, profile: undefined, auth: undefined });
+        expect(window.localStorage.clear).toHaveBeenCalled();
+    });
+
     it('Set token', () => {
         Object.defineProperty(window,
             "localStorage",
@@ -47,6 +68,7 @@ describe('User reducer', () => {
                     getItem: jest.fn(key => `{"key":"${key}"}`),
                     setItem: jest.fn((key, value) => { }),
                     removeItem: jest.fn(),
+                    clear: jest.fn(),
                 },
             });
 

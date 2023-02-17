@@ -27,4 +27,9 @@ describe('Order reducer', () => {
             .toEqual({ ...initialState, orders: [{ id: 1 }] });
     });
 
+    it('Receive fail', () => {
+        expect(socketReducer(undefined, receiveSocketMessage({ success: false })))
+            .toEqual(initialState);
+    });
+
 });
