@@ -23,5 +23,11 @@
             "request": "launch",
             "type": "node-terminal"
         },
+        {
+            "command": "npm run cypress",
+            "name": "Run npm cypress",
+            "request": "launch",
+            "type": "node-terminal"
+        },
     ]
 }
