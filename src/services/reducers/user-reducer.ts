@@ -19,7 +19,7 @@ export const userInitialState: () => TUserState = () => ({
 
 const userSlice = createSlice({
     name: 'user',
-    initialState: userInitialState(),
+    initialState: userInitialState,
     reducers: {
         setUser: (state, action: PayloadAction<IUser | undefined>) => {
             state.error = undefined;

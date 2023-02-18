@@ -1,6 +1,42 @@
-import userReducer, { userInitialState, setUser, setAuthToken, setAuthError, clearAuthError } from '../../services/reducers/user-reducer';
+import userReducer, { clearAuthError, setAuthError, setAuthToken, setUser, userInitialState } from '../../services/reducers/user-reducer';
 
 describe('User reducer', () => {
+
+    let setItemSpy, getItemSpy, resetSpy;
+
+    const testData = { test: true };
+    const initStorage = { auth: testData, profile: testData };
+    const mockStorage = {};
+
+    beforeEach(() => {
+        Object.assign(mockStorage, {
+            auth: JSON.stringify(testData),
+            profile: JSON.stringify(testData),
+        });
+
+        setItemSpy = jest
+            .spyOn(global.Storage.prototype, "setItem")
+            .mockImplementation((key, value) => {
+                mockStorage[key] = value;
+            });
+
+        getItemSpy = jest
+            .spyOn(global.Storage.prototype, "getItem")
+            .mockImplementation((key) => mockStorage[key]);
+
+        resetSpy = jest
+            .spyOn(global.Storage.prototype, "clear")
+            .mockImplementation(() =>
+                Object.keys(mockStorage).forEach((key) => delete mockStorage[key])
+            );
+    });
+
+    afterAll(() => {
+        // then, detach our spies to avoid breaking other test suites
+        getItemSpy.mockRestore();
+        setItemSpy.mockRestore();
+        resetSpy.mockRestore();
+    });
 
     it('Should return the initial state', () => {
         expect(userReducer(undefined, {}))
@@ -8,75 +44,33 @@ describe('User reducer', () => {
     });
 
     it('User initial state', () => {
-        Object.defineProperty(window,
-            "localStorage",
-            {
-                value: {
-                    getItem: jest.fn(key => `{"key":"${key}"}`),
-                    setItem: jest.fn(),
-                    removeItem: jest.fn(),
-                },
-            });
         const state = userInitialState();
-        expect(state).toEqual({ auth: { key: "auth" }, profile: { key: "profile" } });
-        expect(window.localStorage.getItem).toHaveBeenCalledTimes(2);
+        expect(state).toEqual(initStorage);
+        expect(getItemSpy).toHaveBeenCalledTimes(2);
     });
 
     it('Set user', () => {
-        Object.defineProperty(window,
-            "localStorage",
-            {
-                value: {
-                    getItem: jest.fn(key => `{"key":"${key}"}`),
-                    setItem: jest.fn((key, value) => { }),
-                    removeItem: jest.fn(),
-                    clear: jest.fn(),
-                },
-            });
-
         const state = userInitialState();
         const user = { id: 1, name: "user" };
         expect(userReducer(state, setUser(user)))
             .toEqual({ ...state, profile: user });
-        expect(window.localStorage.setItem).toHaveBeenCalledWith("profile", JSON.stringify(user));
+        expect(setItemSpy).toHaveBeenCalledWith("profile", JSON.stringify(user));
     });
 
     it('Clear user', () => {
-        Object.defineProperty(window,
-            "localStorage",
-            {
-                value: {
-                    getItem: jest.fn(key => `{"key":"${key}"}`),
-                    setItem: jest.fn((key, value) => { }),
-                    removeItem: jest.fn(),
-                    clear: jest.fn(),
-                },
-            });
-
         const state = userInitialState();
-       
+
         expect(userReducer(state, setUser()))
             .toEqual({ ...state, profile: undefined, auth: undefined });
-        expect(window.localStorage.clear).toHaveBeenCalled();
+        expect(resetSpy).toHaveBeenCalled();
     });
 
     it('Set token', () => {
-        Object.defineProperty(window,
-            "localStorage",
-            {
-                value: {
-                    getItem: jest.fn(key => `{"key":"${key}"}`),
-                    setItem: jest.fn((key, value) => { }),
-                    removeItem: jest.fn(),
-                    clear: jest.fn(),
-                },
-            });
-
         const state = userInitialState();
         const token = { token: "123" };
         expect(userReducer(state, setAuthToken(token)))
             .toEqual({ ...state, auth: token });
-        expect(window.localStorage.setItem).toHaveBeenCalledWith("auth", JSON.stringify(token));
+        expect(setItemSpy).toHaveBeenCalledWith("auth", JSON.stringify(token));
     });
 
     it('Set auth error', () => {
@@ -87,7 +81,7 @@ describe('User reducer', () => {
 
     it('Clear auth error', () => {
         const error = "error";
-        expect(userReducer({ error }, clearAuthError()))
-            .toEqual({ ...userInitialState(), error: undefined });
+        expect(userReducer({ ...userInitialState(), error }, clearAuthError()))
+            .toEqual(userInitialState());
     });
 });
